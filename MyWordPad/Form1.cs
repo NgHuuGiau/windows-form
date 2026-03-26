@@ -574,6 +574,7 @@ namespace MyWordPad
             richTextBox1.Clear();
             fileName = "";
             isChange = false;
+        }
 
         private void findToolStripMenuItem_Click(object sender, EventArgs e)
         {
