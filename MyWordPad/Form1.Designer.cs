@@ -82,7 +82,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.inToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -118,8 +117,7 @@
             this.fontToolStripMenuItem,
             this.paragraphToolStripMenuItem,
             this.bulletsToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.inToolStripMenuItem});
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 3, 0, 3);
@@ -517,22 +515,16 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // groupInformationToolStripMenuItem
             // 
             this.groupInformationToolStripMenuItem.Name = "groupInformationToolStripMenuItem";
-            this.groupInformationToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
+            this.groupInformationToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.groupInformationToolStripMenuItem.Text = "Group Information";
             this.groupInformationToolStripMenuItem.Click += new System.EventHandler(this.groupInformationToolStripMenuItem_Click);
-            // 
-            // inToolStripMenuItem
-            // 
-            this.inToolStripMenuItem.Name = "inToolStripMenuItem";
-            this.inToolStripMenuItem.Size = new System.Drawing.Size(35, 24);
-            this.inToolStripMenuItem.Text = "In";
             // 
             // toolStrip1
             // 
@@ -605,6 +597,7 @@
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton4.Text = "toolStripButton4";
+            this.toolStripButton4.Click += new System.EventHandler(this.MenuSelectFont_Click);
             // 
             // toolStripSeparator2
             // 
@@ -619,6 +612,7 @@
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
             // 
             // toolStripButton6
             // 
@@ -628,6 +622,7 @@
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton6.Text = "toolStripButton6";
+            this.toolStripButton6.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
             // 
             // toolStripButton7
             // 
@@ -637,6 +632,7 @@
             this.toolStripButton7.Name = "toolStripButton7";
             this.toolStripButton7.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton7.Text = "toolStripButton7";
+            this.toolStripButton7.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
             // 
             // toolStripButton8
             // 
@@ -660,6 +656,7 @@
             this.toolStripButton9.Name = "toolStripButton9";
             this.toolStripButton9.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton9.Text = "toolStripButton9";
+            this.toolStripButton9.Click += new System.EventHandler(this.boldToolStripMenuItem_Click);
             // 
             // toolStripButton10
             // 
@@ -669,6 +666,7 @@
             this.toolStripButton10.Name = "toolStripButton10";
             this.toolStripButton10.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton10.Text = "toolStripButton10";
+            this.toolStripButton10.Click += new System.EventHandler(this.underlineToolStripMenuItem_Click);
             // 
             // toolStripButton11
             // 
@@ -678,6 +676,7 @@
             this.toolStripButton11.Name = "toolStripButton11";
             this.toolStripButton11.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton11.Text = "toolStripButton11";
+            this.toolStripButton11.Click += new System.EventHandler(this.italicToolStripMenuItem_Click);
             // 
             // toolStripSeparator13
             // 
@@ -692,6 +691,7 @@
             this.toolStripButton12.Name = "toolStripButton12";
             this.toolStripButton12.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton12.Text = "toolStripButton12";
+            this.toolStripButton12.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
             // toolStripButton13
             // 
@@ -701,6 +701,7 @@
             this.toolStripButton13.Name = "toolStripButton13";
             this.toolStripButton13.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton13.Text = "toolStripButton13";
+            this.toolStripButton13.Click += new System.EventHandler(this.printStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -821,7 +822,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripMenuItem printStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem inToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton5;
         private System.Windows.Forms.ToolStripButton toolStripButton6;
         private System.Windows.Forms.ToolStripButton toolStripButton7;

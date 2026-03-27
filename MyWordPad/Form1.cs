@@ -428,7 +428,14 @@ namespace MyWordPad
 
         private void groupInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("WordPad - Group 3 - 23BITV02 - NIIE");
+            MessageBox.Show(
+                "WordPad - Group 3 - 23BITV02 - NIIE\n" +
+                "- Nguyễn Lê Khánh Hoàng - 2311552947\r\n" +
+                "- Nguyễn Đăng Khoa - 2311554033\r\n" +
+                "- Đỗ Văn Hiệp - 2311553289\r\n" +
+                "- Nguyễn Hữu Giàu - 2311553450\r\n" +
+                "- Nguyễn Lê Văn Dũng - 2311555475\r\n"
+                );
         }
 
         private void printStripMenuItem_Click(object sender, EventArgs e)
