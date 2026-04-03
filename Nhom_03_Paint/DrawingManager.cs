@@ -11,12 +11,37 @@ namespace Nhom_03_Paint
         // Danh sách các hình được vẽ
         private List<Shape> shapes = new List<Shape>();
 
+        // [Khoa] Hình tạm thời dùng để hiển thị preview khi đang kéo chuột (không thêm vào danh sách shapes)
+        private Shape previewShape;
+
         // Biến hỗ trợ Double Buffering
         private Bitmap backBuffer;
         private Graphics backGraphics;
 
         public DrawingManager()
         {
+        }
+
+        // [Khoa] Thiết lập hình preview (sẽ được vẽ trên back buffer nhưng không được lưu vào danh sách shapes)
+        public void SetPreviewShape(Shape s)
+        {
+            // [Khoa] Trước khi gán preview mới, giải phóng Brush của preview cũ nếu có
+            if (previewShape != null)
+            {
+                try { previewShape.Brush?.Dispose(); } catch { }
+            }
+            previewShape = s;
+        }
+
+        // [Khoa] Xóa hình preview khi kết thúc thao tác vẽ
+        public void ClearPreviewShape()
+        {
+            // [Khoa] Giải phóng Brush của preview để tránh rò rỉ GDI+ khi tạo nhiều preview liên tục
+            if (previewShape != null)
+            {
+                try { previewShape.Brush?.Dispose(); } catch { }
+                previewShape = null;
+            }
         }
 
         /// <summary>
@@ -37,7 +62,10 @@ namespace Nhom_03_Paint
         {
             if (shapes.Count > 0)
             {
-                shapes.RemoveAt(shapes.Count - 1);
+                // [Khoa] Giải phóng Brush của shape bị xóa để tránh rò rỉ
+                var idx = shapes.Count - 1;
+                try { shapes[idx].Brush?.Dispose(); } catch { }
+                shapes.RemoveAt(idx);
             }
         }
 
@@ -46,6 +74,11 @@ namespace Nhom_03_Paint
         /// </summary>
         public void ClearAll()
         {
+            // [Khoa] Giải phóng Brush của tất cả shape trước khi clear danh sách
+            foreach (var s in shapes)
+            {
+                try { s.Brush?.Dispose(); } catch { }
+            }
             shapes.Clear();
         }
 
@@ -102,6 +135,25 @@ namespace Nhom_03_Paint
                 }
             }
 
+            // [Khoa] Vẽ hình preview (nếu có) sau khi đã vẽ tất cả hình thực tế.
+            if (previewShape != null)
+            {
+                var state = backGraphics.Save();
+                if (previewShape.RotationAngle != 0)
+                {
+                    Rectangle bounds = previewShape.GetBoundingRectangle();
+                    float centerX = bounds.X + bounds.Width / 2f;
+                    float centerY = bounds.Y + bounds.Height / 2f;
+
+                    backGraphics.TranslateTransform(centerX, centerY);
+                    backGraphics.RotateTransform(previewShape.RotationAngle);
+                    backGraphics.TranslateTransform(-centerX, -centerY);
+                }
+
+                previewShape.Draw(backGraphics);
+                backGraphics.Restore(state);
+            }
+
             // Sao chép từ backbuffer lên màn hình
             g.DrawImageUnscaled(backBuffer, 0, 0);
         }
@@ -148,6 +200,18 @@ namespace Nhom_03_Paint
         /// </summary>
         public void Dispose()
         {
+            // [Khoa] Giải phóng Brush cho preview và cho tất cả shapes
+            if (previewShape != null)
+            {
+                try { previewShape.Brush?.Dispose(); } catch { }
+                previewShape = null;
+            }
+
+            foreach (var s in shapes)
+            {
+                try { s.Brush?.Dispose(); } catch { }
+            }
+
             backGraphics?.Dispose();
             backBuffer?.Dispose();
         }

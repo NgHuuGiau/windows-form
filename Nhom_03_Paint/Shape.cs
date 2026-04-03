@@ -13,11 +13,24 @@ namespace Nhom_03_Paint
         public int BorderWidth { get; set; } = 1;
         public Brush Brush { get; set; }
         public int RotationAngle { get; set; } = 0; // Góc xoay
+        // Selected state for interaction
+        // [Khoa] Cờ cho biết hình đang được chọn hay không. Khi IsSelected = true
+        // thì UI sẽ vẽ khung đánh dấu xung quanh hình (xem DrawSelection).
+        public bool IsSelected { get; set; } = false;
 
         // Constructor
         protected Shape()
         {
+            // [Khoa] Mặc định tạo một SolidBrush từ FillColor. Lưu ý rằng Brush có thể
+            // được tái tạo lại sau này (ví dụ khi người dùng thay đổi màu tô hoặc kiểu
+            // fill) -> các lớp khác sẽ gán lại property này khi cần.
             Brush = new SolidBrush(FillColor);
+        }
+
+        // Kiểm tra điểm có nằm trong hình hay không (mặc định dùng bounding rectangle)
+        public virtual bool Contains(Point p)
+        {
+            return GetBoundingRectangle().Contains(p);
         }
 
         // Phương thức trừu tượng - các hình sẽ phải triển khai
@@ -57,5 +70,22 @@ namespace Nhom_03_Paint
 
             return new Rectangle(x, y, width, height);
         }
+
+        // Vẽ khung đánh dấu khi được chọn
+        public virtual void DrawSelection(Graphics g)
+        {
+            if (!IsSelected) return;
+
+            var rect = GetBoundingRectangle();
+            using (var pen = new Pen(Color.Blue))
+            {
+                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                g.DrawRectangle(pen, rect);
+            }
+        }
+
+        // [Khoa] DrawSelection là nơi duy nhất xử lý việc vẽ khung đánh dấu khi hình
+        // được chọn. Việc tách ra giúp mọi lớp hình chỉ cần gọi DrawSelection(g)
+        // ở cuối phương thức Draw của mình để hỗ trợ tương tác chọn/xóa.
     }
 }
