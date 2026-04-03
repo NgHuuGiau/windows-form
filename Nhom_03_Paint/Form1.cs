@@ -91,8 +91,63 @@ namespace Nhom_03_Paint
                 "- Nguyễn Đăng Khoa\n" +
                 "- Đỗ Văn Hiệp\n" +
                 "- Nguyễn Hữu Giàu\n" +
-                "\nCảm ơn bạn đã sử dụng ứng dụng!", 
+                "\nCảm ơn bạn đã sử dụng ứng dụng!",
                 "Thông tin về ứng dụng", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            drawingManager.DrawAll(e.Graphics, panel1.Width, panel1.Height);
+        }
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isDrawing = true;
+                startPoint = e.Location;
+            }
+        }
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDrawing)
+            {
+                // Vẽ hình tạm thời khi di chuột
+                panel1.Invalidate();
+            }
+        }
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isDrawing)
+            {
+                isDrawing = false;
+                Point endPoint = e.Location;
+                // Tạo hình mới dựa trên lựa chọn
+                Shape newShape = null;
+                switch (shapeSelect.SelectedItem.ToString())
+                {
+                    case "Line":
+                        newShape = new Shapes.LineShape();
+                        break;
+                    case "Rectangle":
+                        newShape = new Shapes.RectangleShape();
+                        break;
+                    case "Square":
+                        newShape = new Shapes.SquareShape();
+                        break;
+                    case "Ellipse":
+                        newShape = new Shapes.EllipseShape();
+                        break;
+                }
+                if (newShape != null)
+                {
+                    newShape.StartPoint = startPoint;
+                    newShape.EndPoint = endPoint;
+                    newShape.BorderColor = colorBorder;
+                    newShape.FillColor = colorFill;
+                    
+                    drawingManager.AddShape(newShape);
+                    panel1.Invalidate(); // Vẽ lại panel
+                }
+            }
         }
     }
 }

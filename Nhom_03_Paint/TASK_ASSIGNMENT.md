@@ -58,15 +58,15 @@
 
 ---
 
-### 4. Dev 4 (Giàu) - [ ]
+### 4. Dev 4 (Giàu) - [X]
 - **Hình học cơ bản:** Triển khai các lớp `LineShape.cs`, `RectangleShape.cs`, `EllipseShape.cs`, `SquareShape.cs`.
 - **Logic vẽ:** Đảm bảo tính toán đúng Rectangle từ 2 điểm MouseDown và MouseUp (hỗ trợ vẽ ngược hướng từ phải sang trái hoặc từ dưới lên trên).
 
 **Files cần tạo:**
-- [ ] `Nhom_03_Paint/Shapes/LineShape.cs`
-- [ ] `Nhom_03_Paint/Shapes/RectangleShape.cs`
-- [ ] `Nhom_03_Paint/Shapes/EllipseShape.cs`
-- [ ] `Nhom_03_Paint/Shapes/SquareShape.cs`
+- [X] `Nhom_03_Paint/Shapes/LineShape.cs`
+- [X] `Nhom_03_Paint/Shapes/RectangleShape.cs`
+- [X] `Nhom_03_Paint/Shapes/EllipseShape.cs`
+- [X] `Nhom_03_Paint/Shapes/SquareShape.cs`
 
 ---
 
