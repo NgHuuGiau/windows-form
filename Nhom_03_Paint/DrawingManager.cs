@@ -1,31 +1,29 @@
-﻿using System;
+using Nhom_03_Paint.Shapes;
+using System.Drawing.Drawing2D;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Nhom_03_Paint
 {
     internal class DrawingManager
     {
-        // Danh sách các hình được vẽ
         private List<Shape> shapes = new List<Shape>();
 
-        // [Khoa] Hình tạm thời dùng để hiển thị preview khi đang kéo chuột (không thêm vào danh sách shapes)
+        private Stack<List<Shape>> undoStack = new Stack<List<Shape>>();
+        private Stack<List<Shape>> redoStack = new Stack<List<Shape>>();
+        private const int MaxHistorySize = 50;
+
         private Shape previewShape;
 
-        // Biến hỗ trợ Double Buffering
         private Bitmap backBuffer;
         private Graphics backGraphics;
 
-        public DrawingManager()
-        {
-        }
-
-        // [Khoa] Thiết lập hình preview (sẽ được vẽ trên back buffer nhưng không được lưu vào danh sách shapes)
         public void SetPreviewShape(Shape s)
         {
-            // [Khoa] Trước khi gán preview mới, giải phóng Brush của preview cũ nếu có
             if (previewShape != null)
             {
                 try { previewShape.Brush?.Dispose(); } catch { }
@@ -38,10 +36,8 @@ namespace Nhom_03_Paint
             }
         }
 
-        // [Khoa] Xóa hình preview khi kết thúc thao tác vẽ
         public void ClearPreviewShape()
         {
-            // [Khoa] Giải phóng Brush của preview để tránh rò rỉ GDI+ khi tạo nhiều preview liên tục
             if (previewShape != null)
             {
                 try { previewShape.Brush?.Dispose(); } catch { }
@@ -50,37 +46,28 @@ namespace Nhom_03_Paint
             }
         }
 
-        /// <summary>
-        /// Thêm hình mới vào danh sách
-        /// </summary>
         public void AddShape(Shape shape)
         {
             if (shape != null)
             {
+                SaveState();
                 shapes.Add(shape);
+                redoStack.Clear();
             }
         }
 
-        /// <summary>
-        /// Xóa hình cuối cùng
-        /// </summary>
         public void RemoveLastShape()
         {
             if (shapes.Count > 0)
             {
-                // [Khoa] Giải phóng Brush của shape bị xóa để tránh rò rỉ
                 var idx = shapes.Count - 1;
                 try { shapes[idx].Brush?.Dispose(); } catch { }
                 shapes.RemoveAt(idx);
             }
         }
 
-        /// <summary>
-        /// Xóa tất cả hình
-        /// </summary>
         public void ClearAll()
         {
-            // [Khoa] Giải phóng Brush của tất cả shape trước khi clear danh sách
             foreach (var s in shapes)
             {
                 try { s.Brush?.Dispose(); } catch { }
@@ -88,17 +75,137 @@ namespace Nhom_03_Paint
             shapes.Clear();
         }
 
-        /// <summary>
-        /// Lấy danh sách hình hiện tại
-        /// </summary>
+        public bool DeleteSelectedShape()
+        {
+            for (int i = shapes.Count - 1; i >= 0; i--)
+            {
+                if (shapes[i].IsSelected)
+                {
+                    SaveState();
+                    try { shapes[i].Brush?.Dispose(); } catch { }
+                    shapes.RemoveAt(i);
+                    redoStack.Clear();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Undo()
+        {
+            if (undoStack.Count == 0) return false;
+            redoStack.Push(CloneShapes(shapes));
+            shapes = CloneShapes(undoStack.Pop());
+            return true;
+        }
+
+        public bool Redo()
+        {
+            if (redoStack.Count == 0) return false;
+            undoStack.Push(CloneShapes(shapes));
+            shapes = CloneShapes(redoStack.Pop());
+            return true;
+        }
+
+        private void SaveState()
+        {
+            undoStack.Push(CloneShapes(shapes));
+            if (undoStack.Count > MaxHistorySize)
+            {
+                // Convert stack to list (oldest at index 0), keep only the newest MaxHistorySize
+                var temp = new List<List<Shape>>(undoStack);
+                temp.Reverse(); // Now oldest at index 0
+                temp = temp.Skip(temp.Count - MaxHistorySize).ToList();
+                undoStack.Clear();
+                // Push back in correct order (newest on top)
+                foreach (var state in temp)
+                {
+                    undoStack.Push(state);
+                }
+            }
+        }
+
+        private List<Shape> CloneShapes(List<Shape> source)
+        {
+            var clone = new List<Shape>();
+            foreach (var s in source)
+            {
+                var newShape = CloneShape(s);
+                if (newShape != null) clone.Add(newShape);
+            }
+            return clone;
+        }
+
+        private Shape CloneShape(Shape source)
+        {
+            Shape clone = null;
+            switch (source)
+            {
+                case LineShape _:
+                    clone = new LineShape();
+                    break;
+                case RectangleShape _:
+                    clone = new RectangleShape();
+                    break;
+                case EllipseShape _:
+                    clone = new EllipseShape();
+                    break;
+                case TriangleShape _:
+                    clone = new TriangleShape();
+                    break;
+                case ParallelogramShape _:
+                    clone = new ParallelogramShape();
+                    break;
+                case SquareShape _:
+                    clone = new SquareShape();
+                    break;
+                case TextShape _:
+                    clone = new TextShape();
+                    break;
+                default:
+                    return null;
+            }
+
+            clone.StartPoint = source.StartPoint;
+            clone.EndPoint = source.EndPoint;
+            clone.BorderColor = source.BorderColor;
+            clone.FillColor = source.FillColor;
+            clone.BorderWidth = source.BorderWidth;
+            clone.RotationAngle = source.RotationAngle;
+            clone.IsSelected = source.IsSelected;
+
+            if (source.Brush is LinearGradientBrush lgb)
+            {
+                clone.Brush = lgb.Clone() as LinearGradientBrush;
+            }
+            else if (source.Brush is PathGradientBrush pgb)
+            {
+                clone.Brush = pgb.Clone() as PathGradientBrush;
+            }
+            else if (source.Brush is HatchBrush hb)
+            {
+                clone.Brush = hb.Clone() as HatchBrush;
+            }
+            else
+            {
+                clone.Brush = new SolidBrush(source.FillColor);
+            }
+
+            if (source is TextShape textSrc && clone is TextShape textClone)
+            {
+                textClone.Text = textSrc.Text;
+                textClone.Font = textSrc.Font;
+                textClone.TextColor = textSrc.TextColor;
+            }
+
+            return clone;
+        }
+
         public List<Shape> GetShapes()
         {
             return shapes;
         }
 
-        /// <summary>
-        /// Vẽ tất cả hình với Double Buffering để tránh giật lag
-        /// </summary>
         public void DrawAll(Graphics g, int width, int height)
         {
             if (backBuffer == null || backBuffer.Width != width || backBuffer.Height != height)
@@ -109,21 +216,16 @@ namespace Nhom_03_Paint
                 backGraphics = Graphics.FromImage(backBuffer);
             }
 
-            // Clear backbuffer
             backGraphics.Clear(Color.White);
 
-            // Vẽ tất cả hình lên backbuffer
             foreach (var shape in shapes)
             {
                 if (shape != null)
                 {
-                    // Lưu trạng thái Transform hiện tại
                     var state = backGraphics.Save();
 
-                    // Nếu có góc xoay, apply RotateTransform
                     if (shape.RotationAngle != 0)
                     {
-                        // Tìm điểm trung tâm của hình
                         Rectangle bounds = shape.GetBoundingRectangle();
                         float centerX = bounds.X + bounds.Width / 2f;
                         float centerY = bounds.Y + bounds.Height / 2f;
@@ -133,15 +235,12 @@ namespace Nhom_03_Paint
                         backGraphics.TranslateTransform(-centerX, -centerY);
                     }
 
-                    // Vẽ hình
                     shape.Draw(backGraphics);
 
-                    // Restore trạng thái Transform
                     backGraphics.Restore(state);
                 }
             }
 
-            // Vẽ handles cho các hình được chọn (không xoay)
             foreach (var shape in shapes)
             {
                 if (shape != null && shape.IsSelected)
@@ -150,7 +249,6 @@ namespace Nhom_03_Paint
                 }
             }
 
-            // [Khoa] Vẽ hình preview (nếu có) sau khi đã vẽ tất cả hình thực tế.
             if (previewShape != null)
             {
                 var state = backGraphics.Save();
@@ -169,13 +267,9 @@ namespace Nhom_03_Paint
                 backGraphics.Restore(state);
             }
 
-            // Sao chép từ backbuffer lên màn hình
             g.DrawImageUnscaled(backBuffer, 0, 0);
         }
 
-        /// <summary>
-        /// Lưu Panel thành file hình ảnh (JPG, PNG, BMP)
-        /// </summary>
         public bool SaveImage(string filePath, Image imageToSave)
         {
             try
@@ -210,12 +304,8 @@ namespace Nhom_03_Paint
             }
         }
 
-        /// <summary>
-        /// Cleanup resources
-        /// </summary>
         public void Dispose()
         {
-            // [Khoa] Giải phóng Brush cho preview và cho tất cả shapes
             if (previewShape != null)
             {
                 try { previewShape.Brush?.Dispose(); } catch { }
@@ -231,9 +321,6 @@ namespace Nhom_03_Paint
             backBuffer?.Dispose();
         }
 
-        /// <summary>
-        /// Lấy số lượng hình hiện tại
-        /// </summary>
         public int GetShapeCount()
         {
             return shapes.Count;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,8 +14,8 @@ namespace Nhom_03_Paint
 {
     public partial class Form1 : Form
     {
-        Color colorBorder; //BIẾN LƯU MÀU VIỀN
-        Color colorFill; //BIẾN LƯU MÀU TÔ
+        Color colorBorder;
+        Color colorFill;
 
         private DrawingManager drawingManager;
         private bool isDrawing = false;
@@ -26,7 +26,6 @@ namespace Nhom_03_Paint
         private Point originalDelta = Point.Empty;
         private Point lastEndPoint = Point.Empty;
 
-        // Resize handles
         private enum ResizeHandle { None, TopLeft, TopCenter, TopRight, MiddleLeft, MiddleRight, BottomLeft, BottomCenter, BottomRight }
         private ResizeHandle currentResizeHandle = ResizeHandle.None;
         private bool isResizing = false;
@@ -45,14 +44,14 @@ namespace Nhom_03_Paint
             Rectangle rect = shape.GetBoundingRectangle();
             return new Point[]
             {
-                new Point(rect.Left, rect.Top),          // TopLeft
-                new Point(rect.Left + rect.Width / 2, rect.Top),    // TopCenter
-                new Point(rect.Right, rect.Top),         // TopRight
-                new Point(rect.Left, rect.Top + rect.Height / 2),   // MiddleLeft
-                new Point(rect.Right, rect.Top + rect.Height / 2),  // MiddleRight
-                new Point(rect.Left, rect.Bottom),       // BottomLeft
-                new Point(rect.Left + rect.Width / 2, rect.Bottom), // BottomCenter
-                new Point(rect.Right, rect.Bottom)       // BottomRight
+                new Point(rect.Left, rect.Top),
+                new Point(rect.Left + rect.Width / 2, rect.Top),
+                new Point(rect.Right, rect.Top),
+                new Point(rect.Left, rect.Top + rect.Height / 2),
+                new Point(rect.Right, rect.Top + rect.Height / 2),
+                new Point(rect.Left, rect.Bottom),
+                new Point(rect.Left + rect.Width / 2, rect.Bottom),
+                new Point(rect.Right, rect.Bottom)
             };
         }
 
@@ -121,13 +120,11 @@ namespace Nhom_03_Paint
                     break;
             }
 
-            // Normalize: ensure left <= right and top <= bottom
             int newLeft = Math.Min(left, right);
             int newTop = Math.Min(top, bottom);
             int newRight = Math.Max(left, right);
             int newBottom = Math.Max(top, bottom);
 
-            // Ensure minimum size
             if (newRight - newLeft < minSize)
             {
                 if (currentResizeHandle == ResizeHandle.TopLeft || currentResizeHandle == ResizeHandle.MiddleLeft || currentResizeHandle == ResizeHandle.BottomLeft)
@@ -157,7 +154,6 @@ namespace Nhom_03_Paint
         {
             base.OnLoad(e);
             this.DoubleBuffered = true;
-            //panel1.DoubleBuffered = true;
             panel1.MouseDown += panel1_MouseDown;
             panel1.MouseMove += panel1_MouseMove;
             panel1.MouseUp += panel1_MouseUp;
@@ -173,6 +169,60 @@ namespace Nhom_03_Paint
             base.OnFormClosing(e);
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.Z))
+            {
+                Undo_Click(null, null);
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.Y))
+            {
+                Redo_Click(null, null);
+                return true;
+            }
+            if (keyData == Keys.Delete)
+            {
+                Delete_Click(null, null);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public void Undo_Click(object sender, EventArgs e)
+        {
+            if (drawingManager.Undo())
+            {
+                ClearSelection();
+                panel1.Invalidate();
+            }
+        }
+
+        public void Redo_Click(object sender, EventArgs e)
+        {
+            if (drawingManager.Redo())
+            {
+                ClearSelection();
+                panel1.Invalidate();
+            }
+        }
+
+        public void Delete_Click(object sender, EventArgs e)
+        {
+            if (drawingManager.DeleteSelectedShape())
+            {
+                panel1.Invalidate();
+            }
+        }
+
+        private void ClearSelection()
+        {
+            foreach (var s in drawingManager.GetShapes())
+            {
+                s.IsSelected = false;
+            }
+        }
+
         private void colorBorder_Click(object sender, EventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();
@@ -180,7 +230,6 @@ namespace Nhom_03_Paint
             {
                 colorBorder = colorDialog.Color;
                 colorBorderSelect.BackColor = colorBorder;
-                // Update selected shape if any
                 if (SelectedShape != null && !(SelectedShape is TextShape))
                 {
                     SelectedShape.BorderColor = colorBorder;
@@ -196,7 +245,6 @@ namespace Nhom_03_Paint
             {
                 colorFill = colorDialog.Color;
                 colorFillSelect.BackColor = colorFill;
-                // Update selected shape if any
                 if (SelectedShape != null && !(SelectedShape is TextShape))
                 {
                     SelectedShape.FillColor = colorFill;
@@ -229,7 +277,6 @@ namespace Nhom_03_Paint
                 labelGrad.Visible = true;
                 gradientDirectionSelect.Visible = true;
             }
-            // Update selected shape if any
             if (SelectedShape != null && !(SelectedShape is TextShape))
             {
                 SetShapeBrush(SelectedShape);
@@ -239,7 +286,6 @@ namespace Nhom_03_Paint
 
         private void gradientDirectionSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Update selected shape if any and fill style is gradient
             if (SelectedShape != null && !(SelectedShape is TextShape) && fillStyleSelect.SelectedItem?.ToString() == "LinearGradientMode")
             {
                 SetShapeBrush(SelectedShape);
@@ -249,7 +295,6 @@ namespace Nhom_03_Paint
 
         private void sizeBorder_ValueChanged(object sender, EventArgs e)
         {
-            // Update selected shape if any
             if (SelectedShape != null && !(SelectedShape is TextShape))
             {
                 SelectedShape.BorderWidth = (int)sizeBorder.Value;
@@ -274,7 +319,6 @@ namespace Nhom_03_Paint
         {
             drawingManager.DrawAll(e.Graphics, panel1.Width, panel1.Height);
 
-            // Draw resize handles if shape is selected
             var selectedShape = SelectedShape;
             if (selectedShape != null && !(selectedShape is TextShape))
             {
@@ -292,10 +336,8 @@ namespace Nhom_03_Paint
         {
             if (e.Button == MouseButtons.Left)
             {
-                // Check if currently editing (resizing or moving)
                 bool wasEditing = isResizing || isMoving;
 
-                // First, check for shape selection using bounding rectangle for easier selection
                 var shapes = drawingManager.GetShapes();
                 Shape selectedShape = null;
                 for (int i = shapes.Count - 1; i >= 0; i--)
@@ -308,12 +350,10 @@ namespace Nhom_03_Paint
                         break;
                     }
                 }
-                // Set selection
                 foreach (var s in shapes)
                 {
                     s.IsSelected = (s == selectedShape);
                 }
-                // Update controls if shape selected and not text
                 if (selectedShape != null && !(selectedShape is TextShape))
                 {
                     colorBorder = selectedShape.BorderColor;
@@ -321,13 +361,11 @@ namespace Nhom_03_Paint
                     colorFill = selectedShape.FillColor;
                     colorFillSelect.BackColor = colorFill;
                     sizeBorder.Value = selectedShape.BorderWidth;
-                    // Note: Fill style not updated for simplicity
                 }
-                panel1.Invalidate(); // Refresh to show selection
+                panel1.Invalidate();
 
                 if (selectedShape != null && !(selectedShape is TextShape))
                 {
-                    // Check if clicked on resize handle
                     Point[] handles = GetResizeHandles(selectedShape);
                     bool onHandle = false;
                     for (int i = 0; i < handles.Length; i++)
@@ -351,7 +389,6 @@ namespace Nhom_03_Paint
                     }
                     if (!onHandle)
                     {
-                        // Start moving the selected shape
                         isMoving = true;
                         movingShape = selectedShape;
                         moveOffset = new Point(e.X - selectedShape.StartPoint.X, e.Y - selectedShape.StartPoint.Y);
@@ -360,7 +397,6 @@ namespace Nhom_03_Paint
                 }
                 else if (selectedShape != null && selectedShape is TextShape)
                 {
-                    // For text, allow moving
                     isMoving = true;
                     movingShape = selectedShape;
                     moveOffset = new Point(e.X - selectedShape.StartPoint.X, e.Y - selectedShape.StartPoint.Y);
@@ -368,30 +404,26 @@ namespace Nhom_03_Paint
                 }
                 else
                 {
-                    // No shape selected, proceed to drawing only if not currently editing
                     if (!wasEditing)
                     {
                         string shapeType = shapeSelect.SelectedItem?.ToString();
                         if (shapeType == "Text")
                         {
-                            // Show text input dialog
                             TextInputDialog dialog = new TextInputDialog();
                             if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.InputText))
                             {
                                 TextShape textShape = new TextShape();
                                 textShape.StartPoint = e.Location;
-                                textShape.EndPoint = e.Location; // Same point for text
+                                textShape.EndPoint = e.Location;
                                 textShape.Text = dialog.InputText;
                                 textShape.Font = dialog.SelectedFont;
                                 textShape.TextColor = dialog.SelectedColor;
-                                // Note: Border and fill not used for text, but set anyway for consistency
                                 textShape.BorderColor = colorBorder;
                                 textShape.BorderWidth = (int)sizeBorder.Value;
                                 textShape.FillColor = colorFill;
-                                SetShapeBrush(textShape); // Though not used
+                                SetShapeBrush(textShape);
 
                                 drawingManager.AddShape(textShape);
-                                // Auto-select the newly drawn text
                                 var allShapes = drawingManager.GetShapes();
                                 foreach (var s in allShapes)
                                 {
@@ -440,7 +472,6 @@ namespace Nhom_03_Paint
                 panel1.Invalidate();
             }
 
-            // Check for resize handles (only when not actively resizing, moving, or drawing)
             if (!isResizing && !isMoving && !isDrawing)
             {
                 var selectedShape = SelectedShape;
@@ -495,7 +526,6 @@ namespace Nhom_03_Paint
                     if (finalShape != null)
                     {
                         drawingManager.AddShape(finalShape);
-                        // Auto-select the newly drawn shape
                         var allShapes = drawingManager.GetShapes();
                         foreach (var s in allShapes)
                         {
@@ -515,7 +545,6 @@ namespace Nhom_03_Paint
             {
                 if (shape.IsSelected && shape is TextShape textShape)
                 {
-                    // Open dialog with current values
                     TextInputDialog dialog = new TextInputDialog();
                     dialog.InputText = textShape.Text;
                     dialog.SelectedFont = textShape.Font;
@@ -569,8 +598,6 @@ namespace Nhom_03_Paint
                 shape.BorderColor = colorBorder;
                 shape.BorderWidth = (int)sizeBorder.Value;
                 shape.FillColor = colorFill;
-                
-                // Set brush based on fill style
                 SetShapeBrush(shape);
             }
 
