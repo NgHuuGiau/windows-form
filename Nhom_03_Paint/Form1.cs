@@ -26,9 +26,103 @@ namespace Nhom_03_Paint
         private Point originalDelta = Point.Empty;
         private Point lastEndPoint = Point.Empty;
 
+        // Resize handles
+        private enum ResizeHandle { None, TopLeft, TopCenter, TopRight, MiddleLeft, MiddleRight, BottomLeft, BottomCenter, BottomRight }
+        private ResizeHandle currentResizeHandle = ResizeHandle.None;
+        private bool isResizing = false;
+        private Point resizeStartPoint = Point.Empty;
+        private Rectangle originalRect = Rectangle.Empty;
+
         private Shape SelectedShape
         {
             get { return drawingManager.GetShapes().FirstOrDefault(s => s.IsSelected); }
+        }
+
+        private Point[] GetResizeHandles(Shape shape)
+        {
+            if (shape == null) return new Point[0];
+
+            Rectangle rect = shape.GetBoundingRectangle();
+            return new Point[]
+            {
+                new Point(rect.Left, rect.Top),          // TopLeft
+                new Point(rect.Left + rect.Width / 2, rect.Top),    // TopCenter
+                new Point(rect.Right, rect.Top),         // TopRight
+                new Point(rect.Left, rect.Top + rect.Height / 2),   // MiddleLeft
+                new Point(rect.Right, rect.Top + rect.Height / 2),  // MiddleRight
+                new Point(rect.Left, rect.Bottom),       // BottomLeft
+                new Point(rect.Left + rect.Width / 2, rect.Bottom), // BottomCenter
+                new Point(rect.Right, rect.Bottom)       // BottomRight
+            };
+        }
+
+        private void SetCursorForHandle(ResizeHandle handle)
+        {
+            switch (handle)
+            {
+                case ResizeHandle.TopLeft:
+                case ResizeHandle.BottomRight:
+                    panel1.Cursor = Cursors.SizeNWSE;
+                    break;
+                case ResizeHandle.TopRight:
+                case ResizeHandle.BottomLeft:
+                    panel1.Cursor = Cursors.SizeNESW;
+                    break;
+                case ResizeHandle.TopCenter:
+                case ResizeHandle.BottomCenter:
+                    panel1.Cursor = Cursors.SizeNS;
+                    break;
+                case ResizeHandle.MiddleLeft:
+                case ResizeHandle.MiddleRight:
+                    panel1.Cursor = Cursors.SizeWE;
+                    break;
+                default:
+                    panel1.Cursor = Cursors.Default;
+                    break;
+            }
+        }
+
+        private void ResizeShape(Point currentPoint)
+        {
+            if (movingShape == null) return;
+
+            Rectangle rect = originalRect;
+            Point delta = new Point(currentPoint.X - resizeStartPoint.X, currentPoint.Y - resizeStartPoint.Y);
+
+            switch (currentResizeHandle)
+            {
+                case ResizeHandle.TopLeft:
+                    movingShape.StartPoint = new Point(rect.Left + delta.X, rect.Top + delta.Y);
+                    break;
+                case ResizeHandle.TopCenter:
+                    movingShape.StartPoint = new Point(movingShape.StartPoint.X, rect.Top + delta.Y);
+                    break;
+                case ResizeHandle.TopRight:
+                    movingShape.StartPoint = new Point(movingShape.StartPoint.X, rect.Top + delta.Y);
+                    movingShape.EndPoint = new Point(rect.Right + delta.X, movingShape.EndPoint.Y);
+                    break;
+                case ResizeHandle.MiddleLeft:
+                    movingShape.StartPoint = new Point(rect.Left + delta.X, movingShape.StartPoint.Y);
+                    break;
+                case ResizeHandle.MiddleRight:
+                    movingShape.EndPoint = new Point(rect.Right + delta.X, movingShape.EndPoint.Y);
+                    break;
+                case ResizeHandle.BottomLeft:
+                    movingShape.StartPoint = new Point(rect.Left + delta.X, movingShape.StartPoint.Y);
+                    movingShape.EndPoint = new Point(movingShape.EndPoint.X, rect.Bottom + delta.Y);
+                    break;
+                case ResizeHandle.BottomCenter:
+                    movingShape.EndPoint = new Point(movingShape.EndPoint.X, rect.Bottom + delta.Y);
+                    break;
+                case ResizeHandle.BottomRight:
+                    movingShape.EndPoint = new Point(rect.Right + delta.X, rect.Bottom + delta.Y);
+                    break;
+            }
+
+            // Ensure StartPoint is top-left, EndPoint is bottom-right
+            Rectangle newRect = movingShape.GetBoundingRectangle();
+            movingShape.StartPoint = new Point(Math.Min(newRect.Left, newRect.Right), Math.Min(newRect.Top, newRect.Bottom));
+            movingShape.EndPoint = new Point(Math.Max(newRect.Left, newRect.Right), Math.Max(newRect.Top, newRect.Bottom));
         }
 
         public Form1()
@@ -152,12 +246,28 @@ namespace Nhom_03_Paint
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             drawingManager.DrawAll(e.Graphics, panel1.Width, panel1.Height);
+
+            // Draw resize handles if shape is selected
+            var selectedShape = SelectedShape;
+            if (selectedShape != null && !(selectedShape is TextShape))
+            {
+                Point[] handles = GetResizeHandles(selectedShape);
+                foreach (var handle in handles)
+                {
+                    Rectangle handleRect = new Rectangle(handle.X - 5, handle.Y - 5, 10, 10);
+                    e.Graphics.FillRectangle(new SolidBrush(Color.White), handleRect);
+                    e.Graphics.DrawRectangle(new Pen(Color.Black), handleRect);
+                }
+            }
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
+                // Check if currently editing (resizing or moving)
+                bool wasEditing = isResizing || isMoving;
+
                 // First, check for shape selection
                 var shapes = drawingManager.GetShapes();
                 Shape selectedShape = null;
@@ -186,9 +296,38 @@ namespace Nhom_03_Paint
                 }
                 panel1.Invalidate(); // Refresh to show selection
 
-                if (selectedShape != null)
+                if (selectedShape != null && !(selectedShape is TextShape))
                 {
-                    // Start moving the selected shape
+                    // Check if clicked on resize handle
+                    Point[] handles = GetResizeHandles(selectedShape);
+                    bool onHandle = false;
+                    for (int i = 0; i < handles.Length; i++)
+                    {
+                        Rectangle handleRect = new Rectangle(handles[i].X - 6, handles[i].Y - 6, 12, 12);
+                        if (handleRect.Contains(e.Location))
+                        {
+                            onHandle = true;
+                            currentResizeHandle = (ResizeHandle)(i + 1);
+                            isResizing = true;
+                            movingShape = selectedShape;
+                            resizeStartPoint = e.Location;
+                            originalRect = selectedShape.GetBoundingRectangle();
+                            SetCursorForHandle(currentResizeHandle);
+                            break;
+                        }
+                    }
+                    if (!onHandle)
+                    {
+                        // Start moving the selected shape
+                        isMoving = true;
+                        movingShape = selectedShape;
+                        moveOffset = new Point(e.X - selectedShape.StartPoint.X, e.Y - selectedShape.StartPoint.Y);
+                        originalDelta = new Point(selectedShape.EndPoint.X - selectedShape.StartPoint.X, selectedShape.EndPoint.Y - selectedShape.StartPoint.Y);
+                    }
+                }
+                else if (selectedShape != null && selectedShape is TextShape)
+                {
+                    // For text, allow moving
                     isMoving = true;
                     movingShape = selectedShape;
                     moveOffset = new Point(e.X - selectedShape.StartPoint.X, e.Y - selectedShape.StartPoint.Y);
@@ -196,40 +335,43 @@ namespace Nhom_03_Paint
                 }
                 else
                 {
-                    // No shape selected, proceed to drawing
-                    string shapeType = shapeSelect.SelectedItem?.ToString();
-                    if (shapeType == "Text")
+                    // No shape selected, proceed to drawing only if not currently editing
+                    if (!wasEditing)
                     {
-                        // Show text input dialog
-                        TextInputDialog dialog = new TextInputDialog();
-                        if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.InputText))
+                        string shapeType = shapeSelect.SelectedItem?.ToString();
+                        if (shapeType == "Text")
                         {
-                            TextShape textShape = new TextShape();
-                            textShape.StartPoint = e.Location;
-                            textShape.EndPoint = e.Location; // Same point for text
-                            textShape.Text = dialog.InputText;
-                            textShape.Font = dialog.SelectedFont;
-                            textShape.TextColor = dialog.SelectedColor;
-                            // Note: Border and fill not used for text, but set anyway for consistency
-                            textShape.BorderColor = colorBorder;
-                            textShape.BorderWidth = (int)sizeBorder.Value;
-                            textShape.FillColor = colorFill;
-                            SetShapeBrush(textShape); // Though not used
-
-                            drawingManager.AddShape(textShape);
-                            // Auto-select the newly drawn text
-                            var allShapes = drawingManager.GetShapes();
-                            foreach (var s in allShapes)
+                            // Show text input dialog
+                            TextInputDialog dialog = new TextInputDialog();
+                            if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.InputText))
                             {
-                                s.IsSelected = (s == textShape);
+                                TextShape textShape = new TextShape();
+                                textShape.StartPoint = e.Location;
+                                textShape.EndPoint = e.Location; // Same point for text
+                                textShape.Text = dialog.InputText;
+                                textShape.Font = dialog.SelectedFont;
+                                textShape.TextColor = dialog.SelectedColor;
+                                // Note: Border and fill not used for text, but set anyway for consistency
+                                textShape.BorderColor = colorBorder;
+                                textShape.BorderWidth = (int)sizeBorder.Value;
+                                textShape.FillColor = colorFill;
+                                SetShapeBrush(textShape); // Though not used
+
+                                drawingManager.AddShape(textShape);
+                                // Auto-select the newly drawn text
+                                var allShapes = drawingManager.GetShapes();
+                                foreach (var s in allShapes)
+                                {
+                                    s.IsSelected = (s == textShape);
+                                }
+                                panel1.Invalidate();
                             }
-                            panel1.Invalidate();
                         }
-                    }
-                    else
-                    {
-                        isDrawing = true;
-                        startPoint = e.Location;
+                        else
+                        {
+                            isDrawing = true;
+                            startPoint = e.Location;
+                        }
                     }
                 }
             }
@@ -237,11 +379,19 @@ namespace Nhom_03_Paint
 
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isMoving && movingShape != null)
+            if (isResizing && movingShape != null)
+            {
+                ResizeShape(e.Location);
+                SetShapeBrush(movingShape);
+                SetCursorForHandle(currentResizeHandle);
+                panel1.Invalidate();
+            }
+            else if (isMoving && movingShape != null)
             {
                 Point newStart = new Point(e.X - moveOffset.X, e.Y - moveOffset.Y);
                 movingShape.StartPoint = newStart;
                 movingShape.EndPoint = new Point(newStart.X + originalDelta.X, newStart.Y + originalDelta.Y);
+                panel1.Cursor = Cursors.SizeAll;
                 panel1.Invalidate();
             }
             else if (isDrawing)
@@ -253,7 +403,37 @@ namespace Nhom_03_Paint
                 {
                     drawingManager.SetPreviewShape(previewShape);
                 }
+                panel1.Cursor = Cursors.Cross;
                 panel1.Invalidate();
+            }
+
+            // Check for resize handles
+            var selectedShape = SelectedShape;
+            if (selectedShape != null && !(selectedShape is TextShape))
+            {
+                Point[] handles = GetResizeHandles(selectedShape);
+                bool overHandle = false;
+                for (int i = 0; i < handles.Length; i++)
+                {
+                    Rectangle handleRect = new Rectangle(handles[i].X - 6, handles[i].Y - 6, 12, 12);
+                    if (handleRect.Contains(e.Location))
+                    {
+                        overHandle = true;
+                        currentResizeHandle = (ResizeHandle)(i + 1); // Enum starts from 1
+                        SetCursorForHandle(currentResizeHandle);
+                        break;
+                    }
+                }
+                if (!overHandle)
+                {
+                    currentResizeHandle = ResizeHandle.None;
+                    panel1.Cursor = Cursors.Default;
+                }
+            }
+            else
+            {
+                currentResizeHandle = ResizeHandle.None;
+                panel1.Cursor = Cursors.Default;
             }
         }
 
@@ -261,7 +441,13 @@ namespace Nhom_03_Paint
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (isMoving)
+                if (isResizing)
+                {
+                    isResizing = false;
+                    movingShape = null;
+                    currentResizeHandle = ResizeHandle.None;
+                }
+                else if (isMoving)
                 {
                     isMoving = false;
                     movingShape = null;
