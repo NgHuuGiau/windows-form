@@ -34,15 +34,15 @@
 
 ---
 
-### 2. Dev 2 (Khoa) - [ ]
+### 2. Dev 2 (Khoa) - [X]
 - **Đổ màu nâng cao (Advanced Brushes):** Triển khai các lớp hỗ trợ: `HatchBrush`, `LinearGradientBrush`, `PathGradientBrush`, `TextureBrush`.
 - **Hình học nâng cao:** Cài đặt các lớp `TriangleShape.cs`, `ParallelogramShape.cs` (Hình bình hành).
 - **Tương tác:** Cài đặt logic "Chọn" (Select) hình đã vẽ để thay đổi màu hoặc xóa (yêu cầu nâng cao).
 
 **Files cần tạo:**
-- [ ] `Nhom_03_Paint/Shapes/TriangleShape.cs`
-- [ ] `Nhom_03_Paint/Shapes/ParallelogramShape.cs`
-- [ ] `Nhom_03_Paint/Brushes/GradientBrushes.cs`
+- [X] `Nhom_03_Paint/Shapes/TriangleShape.cs`
+- [X] `Nhom_03_Paint/Shapes/ParallelogramShape.cs`
+- [X] `Nhom_03_Paint/Brushes/GradientBrushes.cs`
 
 ---
 
@@ -70,13 +70,13 @@
 
 ---
 
-### 5. Dev 5 (Hiệp) - [ ]
+### 5. Dev 5 (Hiệp) - [X]
 - **Hệ thống Văn bản:** Xử lý cho phép người dùng nhập text, chọn Font và Size thông qua `FontDialog`, sau đó vẽ lên tọa độ đã chọn.
 - **Quản lý hệ thống:** Xây dựng `AppEnums.cs` để định nghĩa tập trung các kiểu `ShapeType`, `BrushStyle`, giúp code nhất quán giữa các thành viên.
 
 **Files cần tạo:**
-- [ ] `Nhom_03_Paint/TextShape.cs`
-- [ ] `Nhom_03_Paint/AppEnums.cs`
+- [X] `Nhom_03_Paint/TextShape.cs`
+- [X] `Nhom_03_Paint/AppEnums.cs`
 
 ---
 
