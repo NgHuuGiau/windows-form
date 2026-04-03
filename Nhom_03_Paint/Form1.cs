@@ -315,6 +315,11 @@ namespace Nhom_03_Paint
             }
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         public void toolPaste_Click(object sender, EventArgs e)
         {
             if (copiedShape != null)
