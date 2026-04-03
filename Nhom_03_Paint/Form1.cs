@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Nhom_03_Paint.Shapes;
 
 namespace Nhom_03_Paint
 {
@@ -93,6 +95,157 @@ namespace Nhom_03_Paint
                 "- Nguyễn Hữu Giàu\n" +
                 "\nCảm ơn bạn đã sử dụng ứng dụng!", 
                 "Thông tin về ứng dụng", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            drawingManager.DrawAll(e.Graphics, panel1.Width, panel1.Height);
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isDrawing = true;
+                startPoint = e.Location;
+            }
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDrawing)
+            {
+                Shape previewShape = CreateShape(startPoint, e.Location);
+                if (previewShape != null)
+                {
+                    drawingManager.SetPreviewShape(previewShape);
+                }
+                panel1.Invalidate();
+            }
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && isDrawing)
+            {
+                isDrawing = false;
+                Shape finalShape = CreateShape(startPoint, e.Location);
+                if (finalShape != null)
+                {
+                    drawingManager.AddShape(finalShape);
+                }
+                drawingManager.ClearPreviewShape();
+                panel1.Invalidate();
+            }
+        }
+
+        private Shape CreateShape(Point start, Point end)
+        {
+            if (shapeSelect.SelectedIndex < 0)
+                return null;
+
+            string shapeType = shapeSelect.SelectedItem.ToString();
+            Shape shape = null;
+
+            switch (shapeType)
+            {
+                case "Line":
+                    shape = new LineShape();
+                    break;
+                case "Rectangle":
+                    shape = new RectangleShape();
+                    break;
+                case "Ellipse":
+                    shape = new EllipseShape();
+                    break;
+                case "Triangle":
+                    shape = new TriangleShape();
+                    break;
+                case "Parallelogram":
+                    shape = new ParallelogramShape();
+                    break;
+            }
+
+            if (shape != null)
+            {
+                shape.StartPoint = start;
+                shape.EndPoint = end;
+                shape.BorderColor = colorBorder;
+                shape.BorderWidth = (int)sizeBorder.Value;
+                shape.FillColor = colorFill;
+                
+                // Set brush based on fill style
+                SetShapeBrush(shape);
+            }
+
+            return shape;
+        }
+
+        private void SetShapeBrush(Shape shape)
+        {
+            string fillStyle = fillStyleSelect.SelectedItem?.ToString() ?? "Solid";
+            
+            switch (fillStyle)
+            {
+                case "Solid":
+                    shape.Brush = new SolidBrush(colorFill);
+                    break;
+                case "LinearGradientMode":
+                    var rect = shape.GetBoundingRectangle();
+                    if (rect.Width > 0 && rect.Height > 0)
+                    {
+                        LinearGradientMode mode = GetGradientMode();
+                        shape.Brush = new LinearGradientBrush(rect, colorBorder, colorFill, mode);
+                    }
+                    else
+                    {
+                        shape.Brush = new SolidBrush(colorFill);
+                    }
+                    break;
+                case "PathGradientBrush":
+                    var rect2 = shape.GetBoundingRectangle();
+                    if (rect2.Width > 0 && rect2.Height > 0)
+                    {
+                        Point centerPoint = new Point(rect2.X + rect2.Width / 2, rect2.Y + rect2.Height / 2);
+                        Point[] points = new Point[] {
+                            new Point(rect2.X, rect2.Y),
+                            new Point(rect2.Right, rect2.Y),
+                            new Point(rect2.Right, rect2.Bottom),
+                            new Point(rect2.X, rect2.Bottom)
+                        };
+                        shape.Brush = new PathGradientBrush(points);
+                        ((PathGradientBrush)shape.Brush).CenterColor = colorBorder;
+                        ((PathGradientBrush)shape.Brush).SurroundColors = new Color[] { colorFill };
+                    }
+                    else
+                    {
+                        shape.Brush = new SolidBrush(colorFill);
+                    }
+                    break;
+                case "HatchBrush":
+                    shape.Brush = new HatchBrush(HatchStyle.Cross, colorBorder, colorFill);
+                    break;
+                default:
+                    shape.Brush = new SolidBrush(colorFill);
+                    break;
+            }
+        }
+
+        private LinearGradientMode GetGradientMode()
+        {
+            string direction = gradientDirectionSelect.SelectedItem?.ToString() ?? "Horizontal";
+            
+            switch (direction)
+            {
+                case "BackwardDiagonal":
+                    return LinearGradientMode.BackwardDiagonal;
+                case "ForwardDiagonal":
+                    return LinearGradientMode.ForwardDiagonal;
+                case "Vertical":
+                    return LinearGradientMode.Vertical;
+                default:
+                    return LinearGradientMode.Horizontal;
+            }
         }
     }
 }
