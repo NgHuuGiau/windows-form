@@ -564,6 +564,8 @@ namespace Nhom_03_Paint
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ClearSelection();
+
             // Nếu đã có file đang mở thì lưu trực tiếp vào file đó với định dạng gốc
             if (!string.IsNullOrEmpty(currentFilePath) && currentImageFormat != null)
             {
