@@ -204,6 +204,22 @@ namespace Nhom_03_Paint
             {
                 clone.Brush = hb.Clone() as HatchBrush;
             }
+            else if (source.Brush is TextureBrush tb)
+            {
+                // Clone the underlying image to ensure the pasted shape retains the texture
+                try
+                {
+                    Image imgClone = new Bitmap(tb.Image);
+                    var newTb = new TextureBrush(imgClone);
+                    newTb.WrapMode = tb.WrapMode;
+                    clone.Brush = newTb;
+                }
+                catch
+                {
+                    // Fallback to solid brush if cloning the texture fails
+                    clone.Brush = new SolidBrush(source.FillColor);
+                }
+            }
             else
             {
                 clone.Brush = new SolidBrush(source.FillColor);
