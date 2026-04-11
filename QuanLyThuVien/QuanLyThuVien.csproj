@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -139,6 +140,33 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\InputValidator.cs" />
+    <EmbeddedResource Include="FrmBookEntry.resx">
+      <DependentUpon>FrmBookEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmBorrow.resx">
+      <DependentUpon>FrmBorrow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmFineCollection.resx">
+      <DependentUpon>FrmFineCollection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLiquidation.resx">
+      <DependentUpon>FrmLiquidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReaderCard.resx">
+      <DependentUpon>FrmReaderCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReturn.resx">
+      <DependentUpon>FrmReturn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSearchBook.resx">
+      <DependentUpon>FrmSearchBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmStaff.resx">
+      <DependentUpon>FrmStaff.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
