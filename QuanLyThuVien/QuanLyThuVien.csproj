@@ -155,14 +155,23 @@
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmReaderCard.resx">
       <DependentUpon>FrmReaderCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReports.resx">
+      <DependentUpon>FrmReports.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmReturn.resx">
       <DependentUpon>FrmReturn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmSearchBook.resx">
       <DependentUpon>FrmSearchBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSettings.resx">
+      <DependentUpon>FrmSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmStaff.resx">
       <DependentUpon>FrmStaff.cs</DependentUpon>
