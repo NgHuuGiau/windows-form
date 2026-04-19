@@ -114,6 +114,8 @@ QuanLyThuVien/
 ✅ **File được phân công:**
 ```
 QuanLyThuVien/
+├── Helpers/
+│   └── ✅ DatabaseHelper.cs # Cơ chễ hố trợ tương tác với Database
 ├── FrmReaderCard.cs
 ├── FrmReaderCard.Designer.cs
 ├── FrmReaderCard.resx
@@ -168,7 +170,7 @@ QuanLyThuVien/
 | Developer 1 | `Đang tiến hành` | 26-04-2025 | Core Layer |
 | Developer 2 | `Đang tiến hành` | 26-04-2025 | Authentication Layer |
 | Developer 3 | `Đang tiến hành` | 26-04-2025 | Book Management |
-| Developer 4 | `Đang tiến hành` | 26-04-2025 | Transaction Layer |
+| Developer 4 | `Cần kiểm thử` | 26-04-2025 | Transaction Layer |
 | Developer 5 | `Đang tiến hành` | 26-04-2025 | Presentation & Reporting |
 
 ---
