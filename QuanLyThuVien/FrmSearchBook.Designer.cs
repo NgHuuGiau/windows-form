@@ -1,4 +1,4 @@
-﻿namespace QuanLyThuVien
+namespace QuanLyThuVien
 {
     partial class FrmSearchBook
     {
@@ -6,7 +6,7 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
+        
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -82,20 +82,8 @@
             // 
             // cboTheLoaiFilter
             // 
+            this.cboTheLoaiFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTheLoaiFilter.FormattingEnabled = true;
-            this.cboTheLoaiFilter.Items.AddRange(new object[] {
-            "Toán",
-            "Lý",
-            "Hóa",
-            "Sử",
-            "Địa",
-            "Tiếng Anh",
-            "Ngữ Văn",
-            "Sinh",
-            "Aslat",
-            "Truyện Ngôn Tình",
-            "Truyện Phiêu Lưu",
-            "Anime"});
             this.cboTheLoaiFilter.Location = new System.Drawing.Point(8, 65);
             this.cboTheLoaiFilter.Margin = new System.Windows.Forms.Padding(4);
             this.cboTheLoaiFilter.Name = "cboTheLoaiFilter";

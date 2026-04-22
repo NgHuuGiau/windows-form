@@ -27,7 +27,7 @@ namespace QuanLyThuVien
         private void FrmLiquidation_Load(object sender, EventArgs e)
         {
             cboLyDo.Items.Clear();
-            foreach (var c in Enum.GetNames(typeof(LiquidationReason))) cboLyDo.Items.Add(c);
+            foreach (var c in Enum.GetValues(typeof(LiquidationReason))) cboLyDo.Items.Add(((LiquidationReason)c).GetDisplayName());
             if (cboLyDo.Items.Count > 0) cboLyDo.SelectedIndex = 0;
 
             dgvBooks.Columns.Clear();
@@ -43,12 +43,12 @@ namespace QuanLyThuVien
             LoadData();
         }
 
-        private void LoadData(string whereClause = null, SqlParameter[] parameters = null)
+        public void LoadData(string whereClause = null, SqlParameter[] parameters = null)
         {
             try
             {
                 string sql = "SELECT IDSach, TenSach, TacGia, TinhTrang FROM ThongTinSach";
-                
+
                 if (!string.IsNullOrWhiteSpace(whereClause))
                 {
                     sql += " WHERE " + whereClause;
@@ -59,18 +59,27 @@ namespace QuanLyThuVien
                 foreach (DataRow r in dt.Rows)
                 {
                     var statusObj = r["TinhTrang"];
-                    string statusText = statusObj?.ToString() ?? "";
+                    string statusText = statusObj?.ToString()?.Trim() ?? "";
                     if (!string.IsNullOrWhiteSpace(statusText))
                     {
                         statusText = GetStatusText(statusText);
                     }
-                    dgvBooks.Rows.Add(r["IDSach"], r["TenSach"], r["TacGia"], statusText);
+                    dgvBooks.Rows.Add(
+                        r["IDSach"]?.ToString()?.Trim(),
+                        r["TenSach"]?.ToString()?.Trim(),
+                        r["TacGia"]?.ToString()?.Trim(),
+                        statusText);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Không thể truy vấn dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        public void RefreshData()
+        {
+            LoadData();
         }
 
         private string GetStatusText(string status)
@@ -81,15 +90,20 @@ namespace QuanLyThuVien
             {
                 case "ok":
                 case "sẵn sàng":
+                case "ready":
                     return "Sẵn sàng";
                 case "đang mượn":
                 case "muon":
+                case "borrowed":
+                case "dang muon":
                     return "Đang mượn";
                 case "hỏng":
                 case "hong":
+                case "damaged":
                     return "Hỏng";
                 case "mất":
                 case "mat":
+                case "lost":
                     return "Mất";
                 default:
                     return status;
@@ -104,7 +118,7 @@ namespace QuanLyThuVien
             LoadData("IDSach = @id", p);
             foreach (DataGridViewRow row in dgvBooks.Rows)
             {
-                if (row.Cells.Count > 0 && row.Cells[0].Value != null && row.Cells[0].Value.ToString() == id)
+                if (row.Cells.Count > 0 && row.Cells[0].Value != null && row.Cells[0].Value.ToString().Trim() == id)
                 {
                     row.Selected = true;
                     dgvBooks.CurrentCell = row.Cells[0];
@@ -117,7 +131,7 @@ namespace QuanLyThuVien
         {
             if (dgvBooks.SelectedRows.Count > 0)
             {
-                var id = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString();
+                var id = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString()?.Trim();
                 if (!string.IsNullOrWhiteSpace(id)) txtMaSach.Text = id;
             }
         }
@@ -143,7 +157,7 @@ namespace QuanLyThuVien
                 return;
             }
 
-            var id = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString();
+            var id = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString()?.Trim();
             if (string.IsNullOrWhiteSpace(id)) return;
 
             var result = MessageBox.Show($"Bạn có chắc chắn muốn thanh lý sách mã {id}?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -164,14 +178,14 @@ namespace QuanLyThuVien
                     };
                     DatabaseHelper.ExecuteNonQuery(insertSql, insParams);
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     MessageBox.Show("Lỗi khi lưu phiếu thanh lý: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 string newStatus = "Hỏng";
-                if (lydo == "Mất" || lydo == "NgườiDùngLàmMất") newStatus = "Mất";
+                if (lydo == "Mất" || lydo == "Người mất") newStatus = "Mất";
 
                 string updateSql = "UPDATE ThongTinSach SET TinhTrang = @t WHERE IDSach = @id";
                 var p = new SqlParameter[] {
@@ -181,7 +195,18 @@ namespace QuanLyThuVien
                 DatabaseHelper.ExecuteNonQuery(updateSql, p);
 
                 MessageBox.Show("Đã thanh lý sách thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                dgvBooks.Rows.Clear();
+
+                // Refresh lại danh sách sau khi thanh lý
+                LoadData();
+
+                // Refresh form tra cứu sách nếu đang mở
+                foreach (Form frm in Application.OpenForms)
+                {
+                    if (frm is FrmSearchBook searchForm)
+                    {
+                        searchForm.RefreshData();
+                    }
+                }
             }
             catch (Exception ex)
             {

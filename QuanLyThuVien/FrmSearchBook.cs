@@ -22,6 +22,12 @@ namespace QuanLyThuVien
             btnTatCa.Click += Button2_Click;
             btnSanSang.Click += Button3_Click;
             btnDangMuon.Click += Button4_Click;
+            cboTheLoaiFilter.SelectedIndexChanged += CboTheLoaiFilter_SelectedIndexChanged;
+        }
+
+        private void CboTheLoaiFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadData();
         }
 
         private void FrmSearchBook_Load(object sender, EventArgs e)
@@ -35,14 +41,29 @@ namespace QuanLyThuVien
         {
             try
             {
+                cboTheLoaiFilter.SelectedIndexChanged -= CboTheLoaiFilter_SelectedIndexChanged;
+
                 cboTheLoaiFilter.Items.Clear();
-                cboTheLoaiFilter.Items.Add(new CategoryItem("ALL", "Tất cả"));
+                cboTheLoaiFilter.Items.Add("Tất cả");
+
+                string[] orderSequence = { "Mathematics", "Physics", "Chemistry", "Biology", "History", "Geography", "English", "Literature" };
                 var dt = DatabaseHelper.ExecuteQuery("SELECT IDDauSach, TenDauSach FROM DauSach", null);
-                foreach (DataRow r in dt.Rows)
+
+                foreach (var name in orderSequence)
                 {
-                    cboTheLoaiFilter.Items.Add(new CategoryItem(r["IDDauSach"]?.ToString(), r["TenDauSach"]?.ToString()));
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        if (r["TenDauSach"]?.ToString().Trim() == name)
+                        {
+                            cboTheLoaiFilter.Items.Add(new CategoryItem(r["IDDauSach"]?.ToString().Trim(), r["TenDauSach"]?.ToString().Trim()));
+                            break;
+                        }
+                    }
                 }
-                if (cboTheLoaiFilter.Items.Count > 0) cboTheLoaiFilter.SelectedIndex = 0;
+
+                cboTheLoaiFilter.SelectedIndex = 0;
+
+                cboTheLoaiFilter.SelectedIndexChanged += CboTheLoaiFilter_SelectedIndexChanged;
             }
             catch (Exception ex)
             {
@@ -65,6 +86,10 @@ namespace QuanLyThuVien
             dgvBooks.Columns.Add("IDSach", "Mã sách");
             dgvBooks.Columns.Add("TenSach", "Tên sách");
             dgvBooks.Columns.Add("TacGia", "Tác giả");
+            dgvBooks.Columns.Add("NhaXuatBan", "Nhà xuất bản");
+            dgvBooks.Columns.Add("NamXuatBan", "Năm XB");
+            dgvBooks.Columns.Add("TriGia", "Trị giá");
+            dgvBooks.Columns.Add("GiaThue", "Giá thuê");
             dgvBooks.Columns.Add("TheLoai", "Thể loại");
             dgvBooks.Columns.Add("TinhTrang", "Tình trạng");
             dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -72,29 +97,50 @@ namespace QuanLyThuVien
             dgvBooks.DoubleClick += DataGridView1_DoubleClick;
         }
 
-        private void LoadData(string whereClause = null, SqlParameter[] parameters = null)
+        public void LoadData(string whereClause = null, SqlParameter[] parameters = null)
         {
             try
             {
-                string sql = "SELECT s.IDSach, s.TenSach, s.TacGia, d.TenDauSach AS TheLoai, s.TinhTrang FROM ThongTinSach s LEFT JOIN DauSach d ON s.IDDauSach = d.IDDauSach";
-                
+                // Kiểm tra cột GiaThue có tồn tại không
+                bool hasGiaThue = false;
+                try
+                {
+                    var check = DatabaseHelper.ExecuteQuery("SELECT TOP 0 GiaThue FROM ThongTinSach", null);
+                    hasGiaThue = true;
+                }
+                catch { }
+
+                string giaThueCol = hasGiaThue ? ", s.GiaThue" : ", 0 AS GiaThue";
+                string sql = "SELECT s.IDSach, s.TenSach, s.TacGia, s.NhaXuatBan, s.NamXuatBan, s.TriGia" + giaThueCol + ", ISNULL(d.TenDauSach, s.IDDauSach) AS TheLoai, s.IDDauSach, s.TinhTrang FROM ThongTinSach s LEFT JOIN DauSach d ON s.IDDauSach = d.IDDauSach";
+
                 string finalWhere = "";
-                
+
                 if (!string.IsNullOrWhiteSpace(whereClause))
                 {
                     finalWhere = whereClause;
                 }
 
-                if (cboTheLoaiFilter.SelectedItem is CategoryItem cat && cat.Id != "ALL")
+                var selectedCategory = cboTheLoaiFilter.SelectedItem;
+                List<SqlParameter> paramList = new List<SqlParameter>();
+                if (parameters != null) paramList.AddRange(parameters);
+
+                if (selectedCategory != null && selectedCategory.ToString() != "Tất cả" && selectedCategory is CategoryItem catItem)
                 {
-                    string categoryFilter = "s.IDDauSach = @categoryId";
-                    if (!string.IsNullOrWhiteSpace(finalWhere))
+                    string categoryId = catItem.Id;
+
+                    if (!string.IsNullOrWhiteSpace(categoryId))
                     {
-                        finalWhere += " AND " + categoryFilter;
-                    }
-                    else
-                    {
-                        finalWhere = categoryFilter;
+                        string categoryFilter = "RTRIM(s.IDDauSach) = @categoryId";
+
+                        if (!string.IsNullOrWhiteSpace(finalWhere))
+                        {
+                            finalWhere += " AND " + categoryFilter;
+                        }
+                        else
+                        {
+                            finalWhere = categoryFilter;
+                        }
+                        paramList.Add(new SqlParameter("@categoryId", categoryId));
                     }
                 }
 
@@ -103,30 +149,38 @@ namespace QuanLyThuVien
                     sql += " WHERE " + finalWhere;
                 }
 
-                List<SqlParameter> paramList = new List<SqlParameter>();
-                if (parameters != null) paramList.AddRange(parameters);
-                if (cboTheLoaiFilter.SelectedItem is CategoryItem cat2 && cat2.Id != "ALL")
-                {
-                    paramList.Add(new SqlParameter("@categoryId", cat2.Id));
-                }
-
                 var dt = DatabaseHelper.ExecuteQuery(sql, paramList.ToArray());
                 dgvBooks.Rows.Clear();
                 foreach (DataRow r in dt.Rows)
                 {
                     var statusObj = r["TinhTrang"];
-                    string statusText = statusObj?.ToString() ?? "";
+                    string statusText = statusObj?.ToString()?.Trim() ?? "";
                     if (!string.IsNullOrWhiteSpace(statusText))
                     {
                         statusText = GetStatusText(statusText);
                     }
-                    dgvBooks.Rows.Add(r["IDSach"], r["TenSach"], r["TacGia"], r["TheLoai"], statusText);
+                    var theLoai = r["TheLoai"]?.ToString()?.Trim() ?? r["IDDauSach"]?.ToString()?.Trim() ?? "";
+                    dgvBooks.Rows.Add(
+                        r["IDSach"]?.ToString()?.Trim(),
+                        r["TenSach"]?.ToString()?.Trim(),
+                        r["TacGia"]?.ToString()?.Trim(),
+                        r["NhaXuatBan"]?.ToString()?.Trim(),
+                        r["NamXuatBan"],
+                        r["TriGia"],
+                        r["GiaThue"],
+                        theLoai,
+                        statusText);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Không thể truy vấn dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        public void RefreshData()
+        {
+            LoadData();
         }
 
         private string GetStatusText(string status)
@@ -137,15 +191,24 @@ namespace QuanLyThuVien
             {
                 case "ok":
                 case "sẵn sàng":
+                case "ready":
+                case "san sang":
                     return "Sẵn sàng";
                 case "đang mượn":
                 case "muon":
+                case "borrowed":
+                case "dang muon":
                     return "Đang mượn";
                 case "hỏng":
                 case "hong":
+                case "damaged":
                     return "Hỏng";
                 case "mất":
                 case "mat":
+                case "lost":
+                case "lost by user":
+                    return "Mất";
+                case "người dùng làm mất":
                     return "Mất";
                 default:
                     return status;
@@ -155,7 +218,7 @@ namespace QuanLyThuVien
         private void DataGridView1_DoubleClick(object sender, EventArgs e)
         {
             if (dgvBooks.SelectedRows.Count == 0) return;
-            var id = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString();
+            var id = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString()?.Trim();
             if (string.IsNullOrWhiteSpace(id)) return;
             var frm = new FrmLiquidation();
             frm.SelectAndHighlight(id);
