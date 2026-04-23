@@ -22,18 +22,27 @@ namespace QuanLyThuVien.Enums
     {
         public static string GetDisplayName(this BookCategory category)
         {
-            return category switch
+            switch (category)
             {
-                BookCategory.Mathematics => "Mathematics",
-                BookCategory.Physics => "Physics",
-                BookCategory.Chemistry => "Chemistry",
-                BookCategory.Biology => "Biology",
-                BookCategory.History => "History",
-                BookCategory.Geography => "Geography",
-                BookCategory.English => "English",
-                BookCategory.Literature => "Literature",
-                _ => category.ToString()
-            };
+                case BookCategory.Mathematics:
+                    return "Mathematics";
+                case BookCategory.Physics:
+                    return "Physics";
+                case BookCategory.Chemistry:
+                    return "Chemistry";
+                case BookCategory.Biology:
+                    return "Biology";
+                case BookCategory.History:
+                    return "History";
+                case BookCategory.Geography:
+                    return "Geography";
+                case BookCategory.English:
+                    return "English";
+                case BookCategory.Literature:
+                    return "Literature";
+                default:
+                    return category.ToString();
+            }
         }
     }
 }
