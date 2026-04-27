@@ -7,7 +7,8 @@ namespace QuanLyThuVien.Helpers
 {
     public static class DatabaseHelper
     {
-        private static string connectionString = "Server=.;Database=QUANLYTHUVIEN;Trusted_Connection=True;";
+        private static string connectionString = ConfigurationManager.ConnectionStrings["LibraryDB"]?.ConnectionString 
+                                                 ?? "Server=.;Database=QUANLYTHUVIEN;Trusted_Connection=True;";
 
         public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
         {
