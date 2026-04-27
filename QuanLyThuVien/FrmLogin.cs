@@ -1,4 +1,4 @@
-﻿using QuanLyThuVien.Managers;
+using QuanLyThuVien.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,11 +46,11 @@ namespace QuanLyThuVien
 
                 SqlParameter[] paras =
                 {
-            new SqlParameter("@IDNhanVien", idNhanVien),
-            new SqlParameter("@MatKhau", matKhau)
-        };
+                    new SqlParameter("@IDNhanVien", idNhanVien),
+                    new SqlParameter("@MatKhau", matKhau)
+                };
 
-                var taikhoa = DataProvider.SelectData(sql, CommandType.Text, paras);
+                var taikhoa = DatabaseHelper.ExecuteQuery(sql, paras);
 
                 if (taikhoa != null && taikhoa.Rows.Count > 0)
                 {
@@ -85,7 +85,7 @@ namespace QuanLyThuVien
             public static bool IsGiamDoc()
                 => CurrentUser.BoPhan == "Ban Giám Đốc";
             public static bool IsPhoGiamDoc()
-               => CurrentUser.ChucVu == "Thủ Quỹ";
+                => CurrentUser.ChucVu == "Thủ Quỹ";
 
             public static bool IsTruongPhong()
                 => CurrentUser.ChucVu == "Thủ Kho";

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using QuanLyThuVien.Managers;
+using QuanLyThuVien.Helpers;
 
 namespace QuanLyThuVien
 {
@@ -17,7 +17,7 @@ namespace QuanLyThuVien
         // - "Tình hình mượn sách theo thể loại": thống kê theo tháng (dựa trên dateTimePicker1)
         // - "Sách trả trễ": lọc theo ngày (chỉ những sách trả trễ trong ngày được chọn)
         // - "Độc giả nợ tiền phạt": lọc theo ngày (tổng tiền phạt phát sinh trong ngày)
-   
+
         public FrmReports()
         {
             InitializeComponent();
@@ -78,10 +78,13 @@ namespace QuanLyThuVien
                                 "JOIN ThongTinSach s ON ct.IDSach = s.IDSach " +
                                 "JOIN DauSach ds ON s.IDDauSach = ds.IDDauSach " +
                                 "JOIN TheLoai tl ON ds.IDTheLoai = tl.IDTheLoai " +
-                                $"WHERE ct.NgayMuon BETWEEN '{monthStart:yyyy-MM-dd HH:mm:ss}' AND '{monthEnd:yyyy-MM-dd HH:mm:ss}' " +
+                                "WHERE ct.NgayMuon BETWEEN @Start AND @End " +
                                 "GROUP BY tl.TenTheLoai";
 
-                            dt = DataProvider.TruyVan_LayDuLieu(sql);
+                            dt = DatabaseHelper.ExecuteQuery(sql, new System.Data.SqlClient.SqlParameter[] {
+                                new System.Data.SqlClient.SqlParameter("@Start", monthStart),
+                                new System.Data.SqlClient.SqlParameter("@End", monthEnd)
+                            });
 
                             // Thêm hàng tổng vào cuối bảng (giao diện hiển thị giống mẫu báo cáo)
                             try
@@ -119,10 +122,13 @@ namespace QuanLyThuVien
                                 "JOIN ChiTietMuon ct ON pm.IDPhieuMuon = ct.IDPhieuMuon " +
                                 "JOIN ThongTinSach s ON ct.IDSach = s.IDSach " +
                                 "JOIN DauSach ds ON s.IDDauSach = ds.IDDauSach " +
-                                $"WHERE ct.NgayTra BETWEEN '{dayStart:yyyy-MM-dd HH:mm:ss}' AND '{dayEnd:yyyy-MM-dd HH:mm:ss}' " +
+                                "WHERE ct.NgayTra BETWEEN @Start AND @End " +
                                 "AND ct.NgayTra > ct.HanTra";
 
-                            dt = DataProvider.TruyVan_LayDuLieu(sql);
+                            dt = DatabaseHelper.ExecuteQuery(sql, new System.Data.SqlClient.SqlParameter[] {
+                                new System.Data.SqlClient.SqlParameter("@Start", dayStart),
+                                new System.Data.SqlClient.SqlParameter("@End", dayEnd)
+                            });
                         }
                         break;
                     case "Độc giả nợ tiền phạt":
@@ -134,11 +140,14 @@ namespace QuanLyThuVien
                                 "FROM TheDocGia dg " +
                                 "JOIN PhieuMuon pm ON dg.IDDocGia = pm.IDNguoiMuon " +
                                 "JOIN ChiTietMuon ct ON pm.IDPhieuMuon = ct.IDPhieuMuon " +
-                                $"WHERE ct.NgayTra BETWEEN '{dayStart:yyyy-MM-dd HH:mm:ss}' AND '{dayEnd:yyyy-MM-dd HH:mm:ss}' " +
+                                "WHERE ct.NgayTra BETWEEN @Start AND @End " +
                                 "GROUP BY dg.IDDocGia, dg.HoTen " +
                                 "HAVING SUM(ct.TienPhat) > 0";
 
-                            dt = DataProvider.TruyVan_LayDuLieu(sql);
+                            dt = DatabaseHelper.ExecuteQuery(sql, new System.Data.SqlClient.SqlParameter[] {
+                                new System.Data.SqlClient.SqlParameter("@Start", dayStart),
+                                new System.Data.SqlClient.SqlParameter("@End", dayEnd)
+                            });
 
                             // Thêm hàng tổng tiền nợ ở cuối báo cáo
                             try
@@ -175,9 +184,9 @@ namespace QuanLyThuVien
 
                 dataGridView1.DataSource = dt;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Lỗi khi truy vấn dữ liệu: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Có lỗi xảy ra khi truy vấn dữ liệu báo cáo. Vui lòng liên hệ quản trị viên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

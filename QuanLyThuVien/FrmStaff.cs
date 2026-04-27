@@ -1,4 +1,4 @@
-﻿using QuanLyThuVien.Managers;
+using QuanLyThuVien.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,6 @@ namespace QuanLyThuVien
 {
     public partial class FrmStaff : Form
     {
-        string chuoiketnoi = @"Data Source=.;Initial Catalog=QUANLYTHUVIEN;Integrated Security=True";
         public FrmStaff()
         {
             InitializeComponent();
@@ -30,15 +29,15 @@ namespace QuanLyThuVien
 
         private void LayHS_NhanVien()
         {
-
-            var conn = new SqlConnection(chuoiketnoi);
-            conn.Open();
-            var dataTable = new DataTable();
-            var dataAdapter = new SqlDataAdapter("SELECT * FROM HoSoNhanVien", conn);
-            dataAdapter.Fill(dataTable);
-            conn.Close();
-
-            dataGridView1.DataSource = dataTable;
+            try
+            {
+                string sql = "SELECT * FROM HoSoNhanVien";
+                dataGridView1.DataSource = DatabaseHelper.ExecuteQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Thembtn_Click(object sender, EventArgs e)
@@ -63,13 +62,11 @@ namespace QuanLyThuVien
                     return;
                 }
 
-                var sql = "INSERT INTO HoSoNhanVien (IDNhanVien, HoTen, NgaySinh, DiaChi, DienThoai, BangCap, BoPhan, ChucVu, MatKhau) " +
-                    "VALUES (@IDNhanVien, @HoTen, @NgaySinh, @DiaChi, @DienThoai, @BangCap, @BoPhan, @ChucVu, @MatKhau)";
+                string sql = "INSERT INTO HoSoNhanVien (IDNhanVien, HoTen, NgaySinh, DiaChi, DienThoai, BangCap, BoPhan, ChucVu, MatKhau) " +
+                             "VALUES (@ID, @HoTen, @NgaySinh, @DiaChi, @DienThoai, @BangCap, @BoPhan, @ChucVu, @MatKhau)";
 
-                //Tránh SQL Injection 
-                var parameters = new[]
-                {
-                    new SqlParameter("@IDNhanVien", cboidnhanvien.Text.Trim()),
+                SqlParameter[] parameters = {
+                    new SqlParameter("@ID", cboidnhanvien.Text.Trim()),
                     new SqlParameter("@HoTen", cboHoTen.Text.Trim()),
                     new SqlParameter("@NgaySinh", ngaySinh),
                     new SqlParameter("@DiaChi", cboDiaChi.Text.Trim()),
@@ -80,61 +77,40 @@ namespace QuanLyThuVien
                     new SqlParameter("@MatKhau", cboMatKhau.Text.Trim())
                 };
 
-                var result = ExecuteSqlWithParameters(sql, parameters);
-
-                if (result)
-                {
-                    MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    FrmStaff_Load(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show("Thêm nhân viên thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                DatabaseHelper.ExecuteNonQuery(sql, parameters);
+                MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LayHS_NhanVien();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private bool ExecuteSqlWithParameters(string sql, SqlParameter[] parameters)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(chuoiketnoi))
-                {
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddRange(parameters);
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message);
-                return false;
+                MessageBox.Show("Lỗi khi thêm nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnxoa_Click_1(object sender, EventArgs e)
         {
-            var malop = cboidnhanvien.Text.Trim();
-            if (malop.Length > 0)
+            string idNhanVien = cboidnhanvien.Text.Trim();
+            if (string.IsNullOrEmpty(idNhanVien))
             {
-                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa lớp không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes)
-                {
-                    var sql = $"DELETE FROM HoSoNhanVien WHERE IDNhanVien = N'{cboidnhanvien.Text}'";
-                    var xoatat = DataProvider.TruyVan_XuLy(sql);
-                    FrmStaff_Load(sender, e);
-                }
+                MessageBox.Show("Vui lòng chọn nhân viên cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
+            var result = MessageBox.Show($"Bạn có chắc chắn muốn xóa nhân viên {idNhanVien} không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    string sql = "DELETE FROM HoSoNhanVien WHERE IDNhanVien = @ID";
+                    DatabaseHelper.ExecuteNonQuery(sql, new SqlParameter[] { new SqlParameter("@ID", idNhanVien) });
+                    MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LayHS_NhanVien();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
