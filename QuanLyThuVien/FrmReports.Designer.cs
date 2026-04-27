@@ -44,7 +44,7 @@
             // 
             this.labelBaoCao.AutoSize = true;
             this.labelBaoCao.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBaoCao.Location = new System.Drawing.Point(359, 9);
+            this.labelBaoCao.Location = new System.Drawing.Point(13, 47);
             this.labelBaoCao.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelBaoCao.Name = "labelBaoCao";
             this.labelBaoCao.Size = new System.Drawing.Size(315, 24);
@@ -54,17 +54,19 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(344, 39);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(556, 0);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(767, 528);
+            this.dataGridView1.Size = new System.Drawing.Size(556, 567);
             this.dataGridView1.TabIndex = 1;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.comboBoxTongQuan);
             this.groupBox1.Controls.Add(this.buttonHuy);
+            this.groupBox1.Controls.Add(this.labelBaoCao);
             this.groupBox1.Controls.Add(this.buttonTimKiem);
             this.groupBox1.Controls.Add(this.dateTimePicker1);
             this.groupBox1.Controls.Add(this.label4);
@@ -74,7 +76,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(340, 567);
+            this.groupBox1.Size = new System.Drawing.Size(556, 567);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tổng quan ";
@@ -87,18 +89,18 @@
             "Tình hình mượn sách theo thể loại",
             "Sách trả trễ",
             "Độc giả nợ tiền phạt"});
-            this.comboBoxTongQuan.Location = new System.Drawing.Point(7, 39);
+            this.comboBoxTongQuan.Location = new System.Drawing.Point(83, 163);
             this.comboBoxTongQuan.Name = "comboBoxTongQuan";
-            this.comboBoxTongQuan.Size = new System.Drawing.Size(326, 30);
+            this.comboBoxTongQuan.Size = new System.Drawing.Size(406, 30);
             this.comboBoxTongQuan.TabIndex = 8;
             this.comboBoxTongQuan.SelectedIndexChanged += new System.EventHandler(this.comboBoxTongQuan_SelectedIndexChanged);
             // 
             // buttonHuy
             // 
-            this.buttonHuy.Location = new System.Drawing.Point(199, 275);
+            this.buttonHuy.Location = new System.Drawing.Point(340, 381);
             this.buttonHuy.Margin = new System.Windows.Forms.Padding(4);
             this.buttonHuy.Name = "buttonHuy";
-            this.buttonHuy.Size = new System.Drawing.Size(133, 37);
+            this.buttonHuy.Size = new System.Drawing.Size(108, 37);
             this.buttonHuy.TabIndex = 7;
             this.buttonHuy.Text = "Hủy";
             this.buttonHuy.UseVisualStyleBackColor = true;
@@ -106,10 +108,10 @@
             // 
             // buttonTimKiem
             // 
-            this.buttonTimKiem.Location = new System.Drawing.Point(7, 275);
+            this.buttonTimKiem.Location = new System.Drawing.Point(105, 381);
             this.buttonTimKiem.Margin = new System.Windows.Forms.Padding(4);
             this.buttonTimKiem.Name = "buttonTimKiem";
-            this.buttonTimKiem.Size = new System.Drawing.Size(133, 37);
+            this.buttonTimKiem.Size = new System.Drawing.Size(108, 37);
             this.buttonTimKiem.TabIndex = 6;
             this.buttonTimKiem.Text = "Tìm kiếm";
             this.buttonTimKiem.UseVisualStyleBackColor = true;
@@ -119,16 +121,16 @@
             // 
             this.dateTimePicker1.CalendarFont = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePicker1.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(6, 165);
+            this.dateTimePicker1.Location = new System.Drawing.Point(83, 282);
             this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(326, 29);
+            this.dateTimePicker1.Size = new System.Drawing.Size(406, 29);
             this.dateTimePicker1.TabIndex = 5;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 115);
+            this.label4.Location = new System.Drawing.Point(80, 232);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(112, 24);
@@ -142,7 +144,6 @@
             this.ClientSize = new System.Drawing.Size(1112, 567);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.labelBaoCao);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmReports";
             this.Text = "Báo Cáo - Thống Kê";
@@ -151,7 +152,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

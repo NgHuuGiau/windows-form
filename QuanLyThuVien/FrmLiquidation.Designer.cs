@@ -37,8 +37,12 @@
             this.txtMaSach = new System.Windows.Forms.TextBox();
             this.lblMaSach = new System.Windows.Forms.Label();
             this.dgvBooks = new System.Windows.Forms.DataGridView();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.grpThanhLy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpThanhLy
@@ -48,11 +52,11 @@
             this.grpThanhLy.Controls.Add(this.btnDong);
             this.grpThanhLy.Controls.Add(this.btnXacNhan);
             this.grpThanhLy.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpThanhLy.Location = new System.Drawing.Point(19, 145);
+            this.grpThanhLy.Location = new System.Drawing.Point(13, 249);
             this.grpThanhLy.Margin = new System.Windows.Forms.Padding(4);
             this.grpThanhLy.Name = "grpThanhLy";
             this.grpThanhLy.Padding = new System.Windows.Forms.Padding(4);
-            this.grpThanhLy.Size = new System.Drawing.Size(287, 190);
+            this.grpThanhLy.Size = new System.Drawing.Size(232, 190);
             this.grpThanhLy.TabIndex = 7;
             this.grpThanhLy.TabStop = false;
             this.grpThanhLy.Text = "Thanh ly";
@@ -63,7 +67,7 @@
             this.cboLyDo.Location = new System.Drawing.Point(13, 65);
             this.cboLyDo.Margin = new System.Windows.Forms.Padding(4);
             this.cboLyDo.Name = "cboLyDo";
-            this.cboLyDo.Size = new System.Drawing.Size(260, 32);
+            this.cboLyDo.Size = new System.Drawing.Size(207, 32);
             this.cboLyDo.TabIndex = 4;
             // 
             // lblLyDo
@@ -72,7 +76,7 @@
             this.lblLyDo.Location = new System.Drawing.Point(8, 38);
             this.lblLyDo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLyDo.Name = "lblLyDo";
-            this.lblLyDo.Size = new System.Drawing.Size(59, 24);
+            this.lblLyDo.Size = new System.Drawing.Size(58, 24);
             this.lblLyDo.TabIndex = 8;
             this.lblLyDo.Text = "Ly do";
             // 
@@ -81,7 +85,7 @@
             this.btnDong.Location = new System.Drawing.Point(8, 143);
             this.btnDong.Margin = new System.Windows.Forms.Padding(4);
             this.btnDong.Name = "btnDong";
-            this.btnDong.Size = new System.Drawing.Size(267, 33);
+            this.btnDong.Size = new System.Drawing.Size(207, 38);
             this.btnDong.TabIndex = 6;
             this.btnDong.Text = "Dong";
             this.btnDong.UseVisualStyleBackColor = true;
@@ -92,7 +96,7 @@
             this.btnXacNhan.Location = new System.Drawing.Point(8, 105);
             this.btnXacNhan.Margin = new System.Windows.Forms.Padding(4);
             this.btnXacNhan.Name = "btnXacNhan";
-            this.btnXacNhan.Size = new System.Drawing.Size(267, 33);
+            this.btnXacNhan.Size = new System.Drawing.Size(207, 38);
             this.btnXacNhan.TabIndex = 5;
             this.btnXacNhan.Text = "Xac nhan";
             this.btnXacNhan.UseVisualStyleBackColor = true;
@@ -101,10 +105,10 @@
             // btnTimKiem
             // 
             this.btnTimKiem.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTimKiem.Location = new System.Drawing.Point(19, 79);
+            this.btnTimKiem.Location = new System.Drawing.Point(13, 183);
             this.btnTimKiem.Margin = new System.Windows.Forms.Padding(4);
             this.btnTimKiem.Name = "btnTimKiem";
-            this.btnTimKiem.Size = new System.Drawing.Size(287, 33);
+            this.btnTimKiem.Size = new System.Drawing.Size(207, 38);
             this.btnTimKiem.TabIndex = 6;
             this.btnTimKiem.Text = "Tim kiem";
             this.btnTimKiem.UseVisualStyleBackColor = true;
@@ -112,51 +116,72 @@
             // 
             // txtMaSach
             // 
-            this.txtMaSach.Location = new System.Drawing.Point(19, 47);
+            this.txtMaSach.Location = new System.Drawing.Point(11, 153);
             this.txtMaSach.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaSach.Name = "txtMaSach";
-            this.txtMaSach.Size = new System.Drawing.Size(285, 22);
+            this.txtMaSach.Size = new System.Drawing.Size(207, 22);
             this.txtMaSach.TabIndex = 5;
             // 
             // lblMaSach
             // 
             this.lblMaSach.AutoSize = true;
             this.lblMaSach.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaSach.Location = new System.Drawing.Point(13, 15);
+            this.lblMaSach.Location = new System.Drawing.Point(7, 119);
             this.lblMaSach.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMaSach.Name = "lblMaSach";
-            this.lblMaSach.Size = new System.Drawing.Size(84, 24);
+            this.lblMaSach.Size = new System.Drawing.Size(82, 24);
             this.lblMaSach.TabIndex = 9;
             this.lblMaSach.Text = "Ma sach";
             // 
             // dgvBooks
             // 
             this.dgvBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBooks.Location = new System.Drawing.Point(325, 15);
+            this.dgvBooks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBooks.Location = new System.Drawing.Point(0, 0);
             this.dgvBooks.Margin = new System.Windows.Forms.Padding(4);
             this.dgvBooks.Name = "dgvBooks";
             this.dgvBooks.RowHeadersWidth = 51;
-            this.dgvBooks.Size = new System.Drawing.Size(773, 538);
-            this.dgvBooks.TabIndex = 8;
+            this.dgvBooks.Size = new System.Drawing.Size(854, 567);
+            this.dgvBooks.TabIndex = 10;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.grpThanhLy);
+            this.panel1.Controls.Add(this.txtMaSach);
+            this.panel1.Controls.Add(this.btnTimKiem);
+            this.panel1.Controls.Add(this.lblMaSach);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(258, 567);
+            this.panel1.TabIndex = 10;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.dgvBooks);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(258, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(854, 567);
+            this.panel2.TabIndex = 11;
             // 
             // FrmLiquidation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1112, 567);
-            this.Controls.Add(this.btnTimKiem);
-            this.Controls.Add(this.txtMaSach);
-            this.Controls.Add(this.lblMaSach);
-            this.Controls.Add(this.dgvBooks);
-            this.Controls.Add(this.grpThanhLy);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmLiquidation";
             this.Text = "Thanh Ly";
             this.grpThanhLy.ResumeLayout(false);
             this.grpThanhLy.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -171,5 +196,7 @@
         private System.Windows.Forms.TextBox txtMaSach;
         private System.Windows.Forms.Label lblMaSach;
         private System.Windows.Forms.DataGridView dgvBooks;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
     }
 }

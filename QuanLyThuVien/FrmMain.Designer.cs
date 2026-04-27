@@ -43,13 +43,14 @@
             this.DangXuat = new System.Windows.Forms.ToolStripMenuItem();
             this.TroGiup = new System.Windows.Forms.ToolStripMenuItem();
             this.splitter1 = new System.Windows.Forms.Splitter();
+            this.PanelContent = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TraCuuSach
             // 
             this.TraCuuSach.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TraCuuSach.Location = new System.Drawing.Point(16, 255);
+            this.TraCuuSach.Location = new System.Drawing.Point(16, 439);
             this.TraCuuSach.Margin = new System.Windows.Forms.Padding(4);
             this.TraCuuSach.Name = "TraCuuSach";
             this.TraCuuSach.Size = new System.Drawing.Size(200, 37);
@@ -61,7 +62,7 @@
             // PhieuMuonSach
             // 
             this.PhieuMuonSach.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PhieuMuonSach.Location = new System.Drawing.Point(16, 122);
+            this.PhieuMuonSach.Location = new System.Drawing.Point(16, 192);
             this.PhieuMuonSach.Margin = new System.Windows.Forms.Padding(4);
             this.PhieuMuonSach.Name = "PhieuMuonSach";
             this.PhieuMuonSach.Size = new System.Drawing.Size(200, 37);
@@ -73,7 +74,7 @@
             // HSNhanVien
             // 
             this.HSNhanVien.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HSNhanVien.Location = new System.Drawing.Point(16, 33);
+            this.HSNhanVien.Location = new System.Drawing.Point(16, 22);
             this.HSNhanVien.Margin = new System.Windows.Forms.Padding(4);
             this.HSNhanVien.Name = "HSNhanVien";
             this.HSNhanVien.Size = new System.Drawing.Size(200, 37);
@@ -85,7 +86,7 @@
             // TiepNhanSachMoi
             // 
             this.TiepNhanSachMoi.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TiepNhanSachMoi.Location = new System.Drawing.Point(16, 210);
+            this.TiepNhanSachMoi.Location = new System.Drawing.Point(16, 359);
             this.TiepNhanSachMoi.Margin = new System.Windows.Forms.Padding(4);
             this.TiepNhanSachMoi.Name = "TiepNhanSachMoi";
             this.TiepNhanSachMoi.Size = new System.Drawing.Size(200, 37);
@@ -97,7 +98,7 @@
             // TheDocGia
             // 
             this.TheDocGia.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TheDocGia.Location = new System.Drawing.Point(16, 78);
+            this.TheDocGia.Location = new System.Drawing.Point(16, 107);
             this.TheDocGia.Margin = new System.Windows.Forms.Padding(4);
             this.TheDocGia.Name = "TheDocGia";
             this.TheDocGia.Size = new System.Drawing.Size(200, 37);
@@ -109,7 +110,7 @@
             // PhieuTraSach
             // 
             this.PhieuTraSach.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PhieuTraSach.Location = new System.Drawing.Point(16, 166);
+            this.PhieuTraSach.Location = new System.Drawing.Point(16, 274);
             this.PhieuTraSach.Margin = new System.Windows.Forms.Padding(4);
             this.PhieuTraSach.Name = "PhieuTraSach";
             this.PhieuTraSach.Size = new System.Drawing.Size(200, 37);
@@ -121,7 +122,7 @@
             // ThuTienPhat
             // 
             this.ThuTienPhat.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ThuTienPhat.Location = new System.Drawing.Point(16, 299);
+            this.ThuTienPhat.Location = new System.Drawing.Point(16, 520);
             this.ThuTienPhat.Margin = new System.Windows.Forms.Padding(4);
             this.ThuTienPhat.Name = "ThuTienPhat";
             this.ThuTienPhat.Size = new System.Drawing.Size(200, 37);
@@ -133,7 +134,7 @@
             // ThanhLy
             // 
             this.ThanhLy.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ThanhLy.Location = new System.Drawing.Point(16, 343);
+            this.ThanhLy.Location = new System.Drawing.Point(16, 599);
             this.ThanhLy.Margin = new System.Windows.Forms.Padding(4);
             this.ThanhLy.Name = "ThanhLy";
             this.ThanhLy.Size = new System.Drawing.Size(200, 37);
@@ -145,7 +146,7 @@
             // BaoCaoThongKe
             // 
             this.BaoCaoThongKe.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BaoCaoThongKe.Location = new System.Drawing.Point(16, 388);
+            this.BaoCaoThongKe.Location = new System.Drawing.Point(16, 681);
             this.BaoCaoThongKe.Margin = new System.Windows.Forms.Padding(4);
             this.BaoCaoThongKe.Name = "BaoCaoThongKe";
             this.BaoCaoThongKe.Size = new System.Drawing.Size(200, 37);
@@ -157,7 +158,7 @@
             // CaiDat
             // 
             this.CaiDat.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CaiDat.Location = new System.Drawing.Point(16, 432);
+            this.CaiDat.Location = new System.Drawing.Point(16, 761);
             this.CaiDat.Margin = new System.Windows.Forms.Padding(4);
             this.CaiDat.Name = "CaiDat";
             this.CaiDat.Size = new System.Drawing.Size(200, 37);
@@ -209,11 +210,20 @@
             this.splitter1.TabIndex = 12;
             this.splitter1.TabStop = false;
             // 
+            // PanelContent
+            // 
+            this.PanelContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelContent.Location = new System.Drawing.Point(236, 28);
+            this.PanelContent.Name = "PanelContent";
+            this.PanelContent.Size = new System.Drawing.Size(1449, 810);
+            this.PanelContent.TabIndex = 13;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1685, 838);
+            this.Controls.Add(this.PanelContent);
             this.Controls.Add(this.CaiDat);
             this.Controls.Add(this.BaoCaoThongKe);
             this.Controls.Add(this.ThanhLy);
@@ -226,7 +236,6 @@
             this.Controls.Add(this.TraCuuSach);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.splitter1);
-            this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmMain";
@@ -256,6 +265,7 @@
         private System.Windows.Forms.ToolStripMenuItem TroGiup;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ToolStripMenuItem DangXuat;
+        private System.Windows.Forms.Panel PanelContent;
     }
 }
 

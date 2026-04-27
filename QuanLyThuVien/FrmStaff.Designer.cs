@@ -76,12 +76,13 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.cboidnhanvien);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(16, 15);
+            this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(347, 482);
+            this.groupBox1.Size = new System.Drawing.Size(453, 554);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chi tiết nhân viên";
@@ -121,7 +122,7 @@
             this.cboMatKhau.Location = new System.Drawing.Point(137, 364);
             this.cboMatKhau.Margin = new System.Windows.Forms.Padding(4);
             this.cboMatKhau.Name = "cboMatKhau";
-            this.cboMatKhau.Size = new System.Drawing.Size(198, 32);
+            this.cboMatKhau.Size = new System.Drawing.Size(308, 32);
             this.cboMatKhau.TabIndex = 17;
             // 
             // cboChucVu
@@ -136,7 +137,7 @@
             this.cboChucVu.Location = new System.Drawing.Point(138, 324);
             this.cboChucVu.Margin = new System.Windows.Forms.Padding(4);
             this.cboChucVu.Name = "cboChucVu";
-            this.cboChucVu.Size = new System.Drawing.Size(197, 32);
+            this.cboChucVu.Size = new System.Drawing.Size(308, 32);
             this.cboChucVu.TabIndex = 16;
             // 
             // cboBoPhan
@@ -150,7 +151,7 @@
             this.cboBoPhan.Location = new System.Drawing.Point(138, 284);
             this.cboBoPhan.Margin = new System.Windows.Forms.Padding(4);
             this.cboBoPhan.Name = "cboBoPhan";
-            this.cboBoPhan.Size = new System.Drawing.Size(197, 32);
+            this.cboBoPhan.Size = new System.Drawing.Size(308, 32);
             this.cboBoPhan.TabIndex = 15;
             // 
             // cboHoTen
@@ -158,7 +159,7 @@
             this.cboHoTen.Location = new System.Drawing.Point(138, 84);
             this.cboHoTen.Margin = new System.Windows.Forms.Padding(4);
             this.cboHoTen.Name = "cboHoTen";
-            this.cboHoTen.Size = new System.Drawing.Size(195, 32);
+            this.cboHoTen.Size = new System.Drawing.Size(308, 32);
             this.cboHoTen.TabIndex = 14;
             // 
             // label3
@@ -183,7 +184,7 @@
             this.cboBangCap.Location = new System.Drawing.Point(138, 244);
             this.cboBangCap.Margin = new System.Windows.Forms.Padding(4);
             this.cboBangCap.Name = "cboBangCap";
-            this.cboBangCap.Size = new System.Drawing.Size(197, 32);
+            this.cboBangCap.Size = new System.Drawing.Size(308, 32);
             this.cboBangCap.TabIndex = 12;
             // 
             // cboSDT
@@ -191,7 +192,7 @@
             this.cboSDT.Location = new System.Drawing.Point(137, 204);
             this.cboSDT.Margin = new System.Windows.Forms.Padding(4);
             this.cboSDT.Name = "cboSDT";
-            this.cboSDT.Size = new System.Drawing.Size(196, 32);
+            this.cboSDT.Size = new System.Drawing.Size(308, 32);
             this.cboSDT.TabIndex = 11;
             // 
             // cboDiaChi
@@ -199,7 +200,7 @@
             this.cboDiaChi.Location = new System.Drawing.Point(138, 164);
             this.cboDiaChi.Margin = new System.Windows.Forms.Padding(4);
             this.cboDiaChi.Name = "cboDiaChi";
-            this.cboDiaChi.Size = new System.Drawing.Size(195, 32);
+            this.cboDiaChi.Size = new System.Drawing.Size(308, 32);
             this.cboDiaChi.TabIndex = 10;
             // 
             // btnxoa
@@ -256,10 +257,11 @@
             // 
             // date_NS
             // 
-            this.date_NS.Location = new System.Drawing.Point(138, 124);
+            this.date_NS.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.date_NS.Location = new System.Drawing.Point(137, 124);
             this.date_NS.Margin = new System.Windows.Forms.Padding(4);
             this.date_NS.Name = "date_NS";
-            this.date_NS.Size = new System.Drawing.Size(195, 32);
+            this.date_NS.Size = new System.Drawing.Size(308, 28);
             this.date_NS.TabIndex = 3;
             // 
             // label2
@@ -277,7 +279,7 @@
             this.cboidnhanvien.Location = new System.Drawing.Point(138, 44);
             this.cboidnhanvien.Margin = new System.Windows.Forms.Padding(4);
             this.cboidnhanvien.Name = "cboidnhanvien";
-            this.cboidnhanvien.Size = new System.Drawing.Size(197, 32);
+            this.cboidnhanvien.Size = new System.Drawing.Size(308, 32);
             this.cboidnhanvien.TabIndex = 1;
             // 
             // label1
@@ -293,11 +295,12 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(384, 15);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(453, 0);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(667, 524);
+            this.dataGridView1.Size = new System.Drawing.Size(614, 554);
             this.dataGridView1.TabIndex = 5;
             // 
             // FrmStaff
