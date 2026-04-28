@@ -14,9 +14,12 @@ namespace QuanLyThuVien
 {
     public partial class FrmLogin : Form
     {
-        public FrmLogin()
+        private FrmMain _main;
+
+        public FrmLogin(FrmMain main)
         {
             InitializeComponent();
+            _main = main;
         }
 
         public static class CurrentUser
@@ -61,10 +64,7 @@ namespace QuanLyThuVien
                     CurrentUser.BoPhan = row["BoPhan"].ToString();
                     CurrentUser.ChucVu = row["ChucVu"].ToString();
 
-                    // 🔥 gọi về FrmMain
-                    FrmMain main = (FrmMain)this.MdiParent;
-                    main.UpdateUserUI();
-
+                    _main.UpdateUserUI();
                     MessageBox.Show($"Xin chào! {CurrentUser.HoTen}\n" + $"Bộ phận: {CurrentUser.BoPhan}\n" + $"Chức vụ: {CurrentUser.ChucVu}", "Thông tin người dùng", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.Close();
@@ -96,6 +96,11 @@ namespace QuanLyThuVien
 
             public static bool IsThuQuy()
                 => CurrentUser.BoPhan == "Thủ Quỹ";
+        }
+
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
+            taikhoan.Focus();
         }
     }
 }

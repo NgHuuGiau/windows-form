@@ -13,9 +13,69 @@ namespace QuanLyThuVien
 {
     public partial class FrmMain : Form
     {
+
+        Form currentForm = null;
+
         public FrmMain()
         {
             InitializeComponent();
+
+            splitter1.BackColor = Color.FromArgb(30, 30, 45);
+
+            //style button
+            foreach (Control ctrl in splitter1.Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    StyleButton(btn);
+                    AddHover(btn);
+                }
+            }
+
+        }
+
+        private void AddHover(Button button)
+        {
+            button.MouseEnter += (s, e) => button.BackColor = Color.FromArgb(50, 50, 70);
+            button.MouseLeave += (s, e) => button.BackColor = Color.FromArgb(30, 30, 45);
+        }
+
+        private void StyleButton(Button btn)
+        {
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.ForeColor = Color.White;
+            btn.BackColor = Color.FromArgb(30, 30, 45);
+
+            btn.FlatAppearance.BorderSize = 0;
+        }
+
+
+        void OpenForm(Form f)
+        {
+            if (currentForm != null)
+                currentForm.Close();
+
+            currentForm = f;
+
+            f.TopLevel = false;
+            f.FormBorderStyle = FormBorderStyle.None;
+            
+
+            PanelContent.Controls.Clear();
+            PanelContent.Controls.Add(f);
+
+            if (f is FrmLogin)
+            {
+                f.Dock = DockStyle.None;
+                f.Left = (PanelContent.Width - f.Width) / 2;
+                f.Top = (PanelContent.Height - f.Height) / 2;
+            }
+            else
+            {
+                f.Dock = DockStyle.Fill;
+            }
+
+            f.Show();
         }
 
         public void UpdateUserUI()
@@ -95,35 +155,16 @@ namespace QuanLyThuVien
 
         private void DangNhapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (Form frm in this.MdiChildren)
-            {
-                if (frm is FrmLogin)
-                {
-                    frm.Activate();
-                    return;
-                }
-            }
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.MdiParent = this;
-            frmLogin.Show();
+
+            if (currentForm is FrmLogin)
+                return;
+
+            OpenForm(new FrmLogin(this));
         }
 
         private void HSNhanVien_Click(object sender, EventArgs e)
         {
-            if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Ban Giám Đốc")
-            {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmStaff)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmStaff frmStaff = new FrmStaff();
-            frmStaff.MdiParent = this;
-            frmStaff.Show();
-            }
+            OpenForm(new FrmStaff());
         }
 
         private void TheDocGia_Click(object sender, EventArgs e)
@@ -131,17 +172,7 @@ namespace QuanLyThuVien
 
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Thư")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmReaderCard)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmReaderCard frmReaderCard = new FrmReaderCard();
-                frmReaderCard.MdiParent = this;
-                frmReaderCard.Show();
+                OpenForm(new FrmReaderCard());
             }
         }
 
@@ -149,17 +180,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Thư")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmBorrow)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmBorrow frmBorrow = new FrmBorrow();
-                frmBorrow.MdiParent = this;
-                frmBorrow.Show();
+                OpenForm(new FrmBorrow());
             }
         }
 
@@ -167,17 +188,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Thư")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmReturn)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmReturn frmReturn = new FrmReturn();
-                frmReturn.MdiParent = this;
-                frmReturn.Show();
+                OpenForm(new FrmReturn());
             }
         }
 
@@ -185,17 +196,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Kho")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmBookEntry)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmBookEntry frmBookEntry = new FrmBookEntry();
-                frmBookEntry.MdiParent = this;
-                frmBookEntry.Show();
+                OpenForm(new FrmBookEntry());
             }
         }
 
@@ -203,17 +204,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Kho" || CurrentUser.BoPhan == "Ban Giám Đốc" || CurrentUser.BoPhan == "Thủ Thư" || CurrentUser.BoPhan == "Thủ Quỹ")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmSearchBook)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmSearchBook frmSearchBook = new FrmSearchBook();
-                frmSearchBook.MdiParent = this;
-                frmSearchBook.Show();
+                OpenForm(new FrmSearchBook());
             }
         }
 
@@ -221,17 +212,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Quỹ")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmFineCollection)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmFineCollection frmFineCollection = new FrmFineCollection();
-                frmFineCollection.MdiParent = this;
-                frmFineCollection.Show();
+                OpenForm(new FrmFineCollection());
             }
         }
 
@@ -239,17 +220,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Thủ Kho")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmLiquidation)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmLiquidation frmLiquidation = new FrmLiquidation();
-                frmLiquidation.MdiParent = this;
-                frmLiquidation.Show();
+                OpenForm(new FrmLiquidation());
             }
 
         }
@@ -258,17 +229,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Ban Giám Đốc")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmReports)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmReports frmReports = new FrmReports();
-                frmReports.MdiParent = this;
-                frmReports.Show();
+                OpenForm(new FrmReports());
             }
 
         }
@@ -277,17 +238,7 @@ namespace QuanLyThuVien
         {
             if (CurrentUser.BoPhan == "Quản Trị" || CurrentUser.BoPhan == "Ban Giám Đốc")
             {
-                foreach (Form frm in this.MdiChildren)
-                {
-                    if (frm is FrmSettings)
-                    {
-                        frm.Activate();
-                        return;
-                    }
-                }
-                FrmSettings frmSettings = new FrmSettings();
-                frmSettings.MdiParent = this;
-                frmSettings.Show();
+                OpenForm(new FrmSettings());
             }
         }
 
@@ -305,18 +256,7 @@ namespace QuanLyThuVien
         private void FrmMain_Load(object sender, EventArgs e)
         {
             // Show login form automatically on startup (as MDI child)
-            foreach (Form frm in this.MdiChildren)
-            {
-                if (frm is FrmLogin)
-                {
-                    frm.Activate();
-                    return;
-                }
-            }
-
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.MdiParent = this;
-            frmLogin.Show();
+            OpenForm(new FrmLogin(this));
 
             DangXuat.Visible = false;
 
@@ -340,26 +280,8 @@ namespace QuanLyThuVien
             CurrentUser.BoPhan = string.Empty;
             CurrentUser.ChucVu = string.Empty;
 
-            // Close all open child forms except the login form
-            foreach (Form frm in this.MdiChildren)
-            {
-                if (!(frm is FrmLogin))
-                    frm.Close();
-            }
 
-            foreach (Form frm in this.MdiChildren)
-            {
-                if (frm is FrmLogin)
-                {
-                    frm.Activate();
-                    return;
-                }
-            }
-
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.MdiParent = this;
-            frmLogin.Show();
-
+            OpenForm(new FrmLogin(this));
             // Update UI to logged-out state
             DangXuat.Visible = false;
             DangNhap.Text = "Đăng nhập";
@@ -376,5 +298,6 @@ namespace QuanLyThuVien
             BaoCaoThongKe.Enabled = false;
             CaiDat.Enabled = false;
         }
+
     }
 }

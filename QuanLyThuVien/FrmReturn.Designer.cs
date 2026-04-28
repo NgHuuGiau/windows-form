@@ -47,9 +47,11 @@ namespace QuanLyThuVien
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.chkIsLost = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowingList)).BeginInit();
             this.groupBox2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -58,11 +60,11 @@ namespace QuanLyThuVien
             this.groupBox1.Controls.Add(this.txtReaderID);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(16, 15);
+            this.groupBox1.Location = new System.Drawing.Point(8, 13);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(332, 172);
+            this.groupBox1.Size = new System.Drawing.Size(332, 183);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chi tiết thông tin";
@@ -79,7 +81,7 @@ namespace QuanLyThuVien
             // 
             // txtReaderID
             // 
-            this.txtReaderID.Location = new System.Drawing.Point(13, 55);
+            this.txtReaderID.Location = new System.Drawing.Point(13, 63);
             this.txtReaderID.Margin = new System.Windows.Forms.Padding(4);
             this.txtReaderID.Name = "txtReaderID";
             this.txtReaderID.Size = new System.Drawing.Size(305, 32);
@@ -88,7 +90,7 @@ namespace QuanLyThuVien
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 28);
+            this.label1.Location = new System.Drawing.Point(8, 36);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 24);
@@ -98,7 +100,7 @@ namespace QuanLyThuVien
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(821, 516);
+            this.btnCancel.Location = new System.Drawing.Point(8, 555);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(133, 37);
@@ -109,7 +111,7 @@ namespace QuanLyThuVien
             // btnConfirmReturn
             // 
             this.btnConfirmReturn.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConfirmReturn.Location = new System.Drawing.Point(963, 516);
+            this.btnConfirmReturn.Location = new System.Drawing.Point(192, 555);
             this.btnConfirmReturn.Margin = new System.Windows.Forms.Padding(4);
             this.btnConfirmReturn.Name = "btnConfirmReturn";
             this.btnConfirmReturn.Size = new System.Drawing.Size(133, 37);
@@ -120,11 +122,12 @@ namespace QuanLyThuVien
             // dgvBorrowingList
             // 
             this.dgvBorrowingList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBorrowingList.Location = new System.Drawing.Point(356, 15);
+            this.dgvBorrowingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBorrowingList.Location = new System.Drawing.Point(0, 0);
             this.dgvBorrowingList.Margin = new System.Windows.Forms.Padding(4);
             this.dgvBorrowingList.Name = "dgvBorrowingList";
             this.dgvBorrowingList.RowHeadersWidth = 51;
-            this.dgvBorrowingList.Size = new System.Drawing.Size(740, 494);
+            this.dgvBorrowingList.Size = new System.Drawing.Size(1112, 625);
             this.dgvBorrowingList.TabIndex = 5;
             // 
             // groupBox2
@@ -141,7 +144,7 @@ namespace QuanLyThuVien
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.chkIsLost);
             this.groupBox2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(16, 194);
+            this.groupBox2.Location = new System.Drawing.Point(8, 203);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
@@ -176,7 +179,8 @@ namespace QuanLyThuVien
             // 
             // dtpReturnDate
             // 
-            this.dtpReturnDate.Location = new System.Drawing.Point(12, 119);
+            this.dtpReturnDate.CalendarFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpReturnDate.Location = new System.Drawing.Point(15, 120);
             this.dtpReturnDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpReturnDate.Name = "dtpReturnDate";
             this.dtpReturnDate.Size = new System.Drawing.Size(305, 32);
@@ -184,6 +188,7 @@ namespace QuanLyThuVien
             // 
             // dtpBorrowDate
             // 
+            this.dtpBorrowDate.CalendarFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpBorrowDate.Location = new System.Drawing.Point(13, 55);
             this.dtpBorrowDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpBorrowDate.Name = "dtpBorrowDate";
@@ -245,20 +250,29 @@ namespace QuanLyThuVien
             this.chkIsLost.AutoSize = true;
             this.chkIsLost.Location = new System.Drawing.Point(12, 281);
             this.chkIsLost.Name = "chkIsLost";
-            this.chkIsLost.Size = new System.Drawing.Size(115, 28);
+            this.chkIsLost.Size = new System.Drawing.Size(111, 28);
             this.chkIsLost.TabIndex = 10;
             this.chkIsLost.Text = "Mất sách";
             this.chkIsLost.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.groupBox2);
+            this.panel1.Controls.Add(this.btnConfirmReturn);
+            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Controls.Add(this.btnCancel);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(347, 625);
+            this.panel1.TabIndex = 9;
             // 
             // FrmReturn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1112, 567);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnConfirmReturn);
+            this.ClientSize = new System.Drawing.Size(1112, 625);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgvBorrowingList);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmReturn";
@@ -268,6 +282,7 @@ namespace QuanLyThuVien
             ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowingList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -293,5 +308,6 @@ namespace QuanLyThuVien
         private System.Windows.Forms.DateTimePicker dtpBorrowDate;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox chkIsLost;
+        private System.Windows.Forms.Panel panel1;
     }
 }
