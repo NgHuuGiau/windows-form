@@ -238,7 +238,7 @@ namespace QuanLyThuVien
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            LoadData("s.TinhTrang IN (N'OK', N'Sẵn sàng')");
+            LoadData("s.TinhTrang = N'Sẵn sàng'");
         }
 
         private void Button4_Click(object sender, EventArgs e)
