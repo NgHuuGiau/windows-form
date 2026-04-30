@@ -123,6 +123,7 @@ namespace QuanLyThuVien
             // 
             // dgvBorrowingList
             // 
+            this.dgvBorrowingList.BackgroundColor = System.Drawing.SystemColors.ActiveCaption;
             this.dgvBorrowingList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBorrowingList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvBorrowingList.Location = new System.Drawing.Point(0, 0);
@@ -259,6 +260,7 @@ namespace QuanLyThuVien
             // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel1.Controls.Add(this.groupBox2);
             this.panel1.Controls.Add(this.btnConfirmReturn);
             this.panel1.Controls.Add(this.groupBox1);
