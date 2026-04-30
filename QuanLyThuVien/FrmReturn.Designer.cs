@@ -48,10 +48,12 @@ namespace QuanLyThuVien
             this.label2 = new System.Windows.Forms.Label();
             this.chkIsLost = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowingList)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -64,7 +66,7 @@ namespace QuanLyThuVien
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(332, 183);
+            this.groupBox1.Size = new System.Drawing.Size(351, 183);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chi tiết thông tin";
@@ -122,12 +124,12 @@ namespace QuanLyThuVien
             // dgvBorrowingList
             // 
             this.dgvBorrowingList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBorrowingList.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dgvBorrowingList.Location = new System.Drawing.Point(383, 0);
+            this.dgvBorrowingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBorrowingList.Location = new System.Drawing.Point(0, 0);
             this.dgvBorrowingList.Margin = new System.Windows.Forms.Padding(4);
             this.dgvBorrowingList.Name = "dgvBorrowingList";
             this.dgvBorrowingList.RowHeadersWidth = 51;
-            this.dgvBorrowingList.Size = new System.Drawing.Size(729, 625);
+            this.dgvBorrowingList.Size = new System.Drawing.Size(736, 625);
             this.dgvBorrowingList.TabIndex = 5;
             // 
             // groupBox2
@@ -148,7 +150,7 @@ namespace QuanLyThuVien
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(332, 314);
+            this.groupBox2.Size = new System.Drawing.Size(351, 314);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Thanh toán";
@@ -183,7 +185,7 @@ namespace QuanLyThuVien
             this.dtpReturnDate.Location = new System.Drawing.Point(15, 120);
             this.dtpReturnDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpReturnDate.Name = "dtpReturnDate";
-            this.dtpReturnDate.Size = new System.Drawing.Size(305, 32);
+            this.dtpReturnDate.Size = new System.Drawing.Size(328, 32);
             this.dtpReturnDate.TabIndex = 6;
             // 
             // dtpBorrowDate
@@ -192,7 +194,7 @@ namespace QuanLyThuVien
             this.dtpBorrowDate.Location = new System.Drawing.Point(13, 55);
             this.dtpBorrowDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpBorrowDate.Name = "dtpBorrowDate";
-            this.dtpBorrowDate.Size = new System.Drawing.Size(305, 32);
+            this.dtpBorrowDate.Size = new System.Drawing.Size(330, 32);
             this.dtpBorrowDate.TabIndex = 5;
             // 
             // label6
@@ -267,13 +269,22 @@ namespace QuanLyThuVien
             this.panel1.Size = new System.Drawing.Size(376, 625);
             this.panel1.TabIndex = 9;
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.dgvBorrowingList);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(376, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(736, 625);
+            this.panel2.TabIndex = 10;
+            // 
             // FrmReturn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1112, 625);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.dgvBorrowingList);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmReturn";
             this.Text = "Phiếu Trả Sách";
@@ -283,6 +294,7 @@ namespace QuanLyThuVien
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -309,5 +321,6 @@ namespace QuanLyThuVien
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox chkIsLost;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
     }
 }
