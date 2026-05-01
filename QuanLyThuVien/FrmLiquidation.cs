@@ -29,24 +29,24 @@ namespace QuanLyThuVien
         private void InitializeCustomComponents()
         {
             cboLyDo.Items.Clear();
-            cboLyDo.Items.Add(new ReasonItem { Value = LiquidationReason.Lost, Text = "Lost" });
-            cboLyDo.Items.Add(new ReasonItem { Value = LiquidationReason.Damaged, Text = "Damaged" });
-            cboLyDo.Items.Add(new ReasonItem { Value = LiquidationReason.LostByUser, Text = "LostByUser" });
+            cboLyDo.Items.Add(new ReasonItem { Value = LiquidationReason.Lost, Text = "Mất" });
+            cboLyDo.Items.Add(new ReasonItem { Value = LiquidationReason.Damaged, Text = "Hỏng" });
+            cboLyDo.Items.Add(new ReasonItem { Value = LiquidationReason.LostByUser, Text = "Mất do người dùng" });
             if (cboLyDo.Items.Count > 0) cboLyDo.SelectedIndex = 0;
 
             dgvBooks.Columns.Clear();
             dgvBooks.AutoGenerateColumns = false;
             dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvBooks.MultiSelect = false;
-            dgvBooks.Columns.Add("IDSach", "Ma sach");
-            dgvBooks.Columns.Add("TenSach", "Ten sach");
-            dgvBooks.Columns.Add("TacGia", "Tac gia");
-            dgvBooks.Columns.Add("GiaBan", "Tri gia");
-            dgvBooks.Columns.Add("GiaThue", "Gia thue");
-            dgvBooks.Columns.Add("TinhTrang", "Tinh trang");
+            dgvBooks.Columns.Add("IDSach", "Mã sách");
+            dgvBooks.Columns.Add("TenSach", "Tên sách");
+            dgvBooks.Columns.Add("TacGia", "Tác giả");
+            dgvBooks.Columns.Add("GiaBan", "Trị giá");
+            dgvBooks.Columns.Add("GiaThue", "Giá thuê");
+            dgvBooks.Columns.Add("TinhTrang", "Tình trạng");
 
-            dgvBooks.Columns.Add("LyDoThanhLy_SQL", "LyDo_SQL");
-            dgvBooks.Columns["LyDoThanhLy_SQL"].Visible = false;
+            dgvBooks.Columns.Add("LyDoThanhLy_SQL", "Lý do thanh lý");
+            dgvBooks.Columns["LyDoThanhLy_SQL"].Visible = true;
 
             dgvBooks.DoubleClick += DataGridView1_DoubleClick;
         }
@@ -101,7 +101,7 @@ namespace QuanLyThuVien
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Khong the truy van du lieu: " + ex.Message, "Loi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không thể truy vấn dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -206,7 +206,7 @@ namespace QuanLyThuVien
         {
             if (dgvBooks.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Vui long chon sach tu danh sach de thanh ly.", "Chu y", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn sách từ danh sách để thanh lý.", "Chú ý", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -221,13 +221,14 @@ namespace QuanLyThuVien
                 return;
             }
 
-            var result = MessageBox.Show($"Ban co chac chan muon thanh ly sach ma {id}?", "Xac nhan", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show($"Bạn có chắc chắn muốn thanh lý sách mã {id}?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes) return;
 
             try
             {
                 string lydo = null;
-                if (cboLyDo.SelectedItem is ReasonItem ri) lydo = ri.Value.ToString();
+                if (cboLyDo.SelectedItem is ReasonItem ri) 
+                    lydo = ri.Value.GetDisplayName();
 
                 try
                 {
@@ -249,11 +250,19 @@ namespace QuanLyThuVien
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Loi khi luu phieu thanh ly: " + ex.Message, "Loi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Lỗi khi lưu phiếu thanh lý: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                string newStatus = lydo ?? "Damaged";
+                string newStatus;
+                if (cboLyDo.SelectedItem is ReasonItem reasonItem)
+                {
+                    newStatus = reasonItem.Value == LiquidationReason.Damaged ? "Hỏng" : "Mất";
+                }
+                else
+                {
+                    newStatus = "Hỏng";
+                }
 
                 string updateSql = "UPDATE ThongTinSach SET TinhTrang = @t WHERE IDSach = @id";
                 var p = new SqlParameter[] {
@@ -262,7 +271,7 @@ namespace QuanLyThuVien
                 };
                 DatabaseHelper.ExecuteNonQuery(updateSql, p);
 
-                MessageBox.Show("Da thanh ly sach thanh cong.", "Thanh cong", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đã thanh lý sách thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Timkiem_Click(null, null);
                 dgvBooks.ClearSelection();
@@ -277,7 +286,7 @@ namespace QuanLyThuVien
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Loi khi thanh ly sach: " + ex.Message, "Loi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi thanh lý sách: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
