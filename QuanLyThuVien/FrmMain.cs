@@ -20,8 +20,8 @@ namespace QuanLyThuVien
         bool isCollapsed = false;
         Timer sidebarTimer = new Timer();
 
-        int sidebarMaxWidth = 200;
-        int sidebarMinWidth = 60;
+        int sidebarMaxWidth = 236;
+        int sidebarMinWidth = 70;
 
         public FrmMain()
         {
@@ -216,17 +216,37 @@ namespace QuanLyThuVien
                 "5. Nguyễn Hữu Giàu - 2311553450", "Thông tin nhóm 3", MessageBoxButtons.OK);
         }
 
+        private void btnMenu_Click(object sender, EventArgs e)
+        {
+            sidebarTimer.Start();
+        }
+
         private void ShowText()
         {
-            HSNhanVien.Text = "  Hồ sơ nhân viên";
-            TheDocGia.Text = "  Thẻ độc giả";
-            PhieuMuonSach.Text = "  Phiếu mượn sách";
+            HSNhanVien.Text = "Hồ sơ nhân viên";
+            TheDocGia.Text = "Thẻ độc giả";
+            PhieuMuonSach.Text = "Phiếu mượn sách";
+            PhieuTraSach.Text = "Phiếu trả sách";
+            TiepNhanSachMoi.Text = "Tiếp nhận sách mới";
+            TraCuuSach.Text = "Tra cứu sách";
+            ThuTienPhat.Text = "Thu tiền phạt";
+            ThanhLy.Text = "Thanh lý sách";
+            BaoCaoThongKe.Text = "Báo cáo thống kê";
+
             // thêm các nút khác
 
             foreach (var ctrl in panel1.Controls)
             {
-                if (ctrl is FontAwesome.Sharp.IconButton btn)
+                if (ctrl is FontAwesome.Sharp.IconButton btn && btn.Name != "btnMenu")
                 {
+
+                    btn.Width = 229;  // đủ icon + text
+                    btn.Height = 50;
+
+                    btn.TextAlign = ContentAlignment.MiddleCenter;
+                    btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+
+
                     btn.Padding = new Padding(10, 0, 0, 0);
                 }
             }
@@ -236,9 +256,12 @@ namespace QuanLyThuVien
         {
             foreach (var ctrl in panel1.Controls)
             {
-                if (ctrl is FontAwesome.Sharp.IconButton btn)
+                if (ctrl is FontAwesome.Sharp.IconButton btn && btn.Name != "btnMenu")
                 {
                     btn.Text = "";
+                    btn.Width = 60;   // chỉ icon
+                    btn.Height = 50;
+                    btn.ImageAlign = ContentAlignment.MiddleCenter;
                     btn.Padding = new Padding(0);
                 }
             }
@@ -248,6 +271,8 @@ namespace QuanLyThuVien
         {
             if (isCollapsed)
             {
+
+                splitter1.Width += 10;
                 panel1.Width += 10;
 
                 if (panel1.Width >= sidebarMaxWidth)
@@ -259,6 +284,7 @@ namespace QuanLyThuVien
             }
             else
             {
+                splitter1.Width -= 10;
                 panel1.Width -= 10;
 
                 if (panel1.Width <= sidebarMinWidth)
@@ -280,6 +306,7 @@ namespace QuanLyThuVien
             OpenForm(new FrmLogin(this));
 
             DangXuat.Visible = false;
+ 
 
             DisableButton(HSNhanVien);
             DisableButton(TheDocGia);
@@ -347,34 +374,34 @@ namespace QuanLyThuVien
         private void Hover_Enter(object sender, EventArgs e)
         {
             var btn = sender as Button;
-            var rect = (Rectangle)btn.Tag;
 
-            if (!btn.Enabled) return;
+            if (!btn.Enabled || btn.Name == "btnMenu") return;
 
             btn.BackColor = Color.LightBlue;
 
-            btn.Bounds = new Rectangle(
-                rect.X - 3,
-                rect.Y - 8,
-                rect.Width + 6,
-                rect.Height + 6
-            );
+            btn.Width += 6;
+            btn.Height += 6;
+            btn.Left -= 3;
+            btn.Top -= 3;
         }
 
         private void Hover_Leave(object sender, EventArgs e)
         {
             var btn = sender as Button;
-            var rect = (Rectangle)btn.Tag;
+            if (btn.Name == "btnMenu") return;
 
             btn.BackColor = Color.White;
-            btn.Bounds = rect;
+            btn.Width -= 6;
+            btn.Height -= 6;
+            btn.Left += 3;
+            btn.Top += 3;
         }
 
         private void InitHover()
         {
             foreach (Control ctrl in panel1.Controls)
             {
-                if (ctrl is Button btn)
+                if (ctrl is Button btn && btn.Name != "btnMenu")
                 {
                     // Lưu vị trí + size gốc
                     btn.Tag = new Rectangle(btn.Location, btn.Size);
