@@ -35,6 +35,7 @@
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.PanelContent = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnMenu = new FontAwesome.Sharp.IconButton();
             this.BaoCaoThongKe = new FontAwesome.Sharp.IconButton();
             this.ThanhLy = new FontAwesome.Sharp.IconButton();
             this.ThuTienPhat = new FontAwesome.Sharp.IconButton();
@@ -111,6 +112,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.panel1.Controls.Add(this.btnMenu);
             this.panel1.Controls.Add(this.BaoCaoThongKe);
             this.panel1.Controls.Add(this.ThanhLy);
             this.panel1.Controls.Add(this.ThuTienPhat);
@@ -124,6 +126,21 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(236, 838);
             this.panel1.TabIndex = 14;
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.FlatAppearance.BorderSize = 0;
+            this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenu.IconChar = FontAwesome.Sharp.IconChar.List;
+            this.btnMenu.IconColor = System.Drawing.Color.Black;
+            this.btnMenu.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnMenu.IconSize = 35;
+            this.btnMenu.Location = new System.Drawing.Point(3, 11);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(50, 23);
+            this.btnMenu.TabIndex = 18;
+            this.btnMenu.UseVisualStyleBackColor = true;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
             // 
             // BaoCaoThongKe
             // 
@@ -214,7 +231,7 @@
             this.TiepNhanSachMoi.IconChar = FontAwesome.Sharp.IconChar.Info;
             this.TiepNhanSachMoi.IconColor = System.Drawing.Color.Black;
             this.TiepNhanSachMoi.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.TiepNhanSachMoi.IconSize = 30;
+            this.TiepNhanSachMoi.IconSize = 20;
             this.TiepNhanSachMoi.Location = new System.Drawing.Point(3, 389);
             this.TiepNhanSachMoi.Name = "TiepNhanSachMoi";
             this.TiepNhanSachMoi.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -294,7 +311,7 @@
             this.HSNhanVien.IconChar = FontAwesome.Sharp.IconChar.User;
             this.HSNhanVien.IconColor = System.Drawing.Color.Black;
             this.HSNhanVien.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.HSNhanVien.IconSize = 20;
+            this.HSNhanVien.IconSize = 30;
             this.HSNhanVien.Location = new System.Drawing.Point(3, 73);
             this.HSNhanVien.Name = "HSNhanVien";
             this.HSNhanVien.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -344,6 +361,7 @@
         private FontAwesome.Sharp.IconButton ThuTienPhat;
         private FontAwesome.Sharp.IconButton TraCuuSach;
         private FontAwesome.Sharp.IconButton BaoCaoThongKe;
+        private FontAwesome.Sharp.IconButton btnMenu;
     }
 }
 
