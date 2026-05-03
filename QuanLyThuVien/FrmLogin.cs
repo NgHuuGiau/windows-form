@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -57,6 +58,9 @@ namespace QuanLyThuVien
                     return;
                 }
 
+                byte[] bytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(matKhau));
+                string hashedPassword = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+
                 string sql = @"SELECT IDNhanVien, HoTen, BoPhan, ChucVu 
                        FROM HoSoNhanVien 
                        WHERE IDNhanVien = @IDNhanVien AND MatKhau = @MatKhau";
@@ -64,7 +68,7 @@ namespace QuanLyThuVien
                 SqlParameter[] paras =
                 {
                     new SqlParameter("@IDNhanVien", idNhanVien),
-                    new SqlParameter("@MatKhau", matKhau)
+                    new SqlParameter("@MatKhau", hashedPassword)
                 };
 
                 var taikhoa = DatabaseHelper.ExecuteQuery(sql, paras);

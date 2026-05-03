@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace QuanLyThuVien
 {
@@ -31,7 +32,7 @@ namespace QuanLyThuVien
         {
             try
             {
-                string sql = "SELECT * FROM HoSoNhanVien";
+                string sql = "SELECT IDNhanVien, HoTen, NgaySinh, DiaChi, DienThoai, BangCap, BoPhan, ChucVu FROM HoSoNhanVien";
                 dataGridView1.DataSource = DatabaseHelper.ExecuteQuery(sql);
             }
             catch (Exception ex)
@@ -104,6 +105,9 @@ namespace QuanLyThuVien
                 string sql = "INSERT INTO HoSoNhanVien (IDNhanVien, HoTen, NgaySinh, DiaChi, DienThoai, BangCap, BoPhan, ChucVu, MatKhau) " +
                              "VALUES (@ID, @HoTen, @NgaySinh, @DiaChi, @DienThoai, @BangCap, @BoPhan, @ChucVu, @MatKhau)";
 
+                byte[] bytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(cboMatKhau.Text.Trim()));
+                string hashedPassword = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+
                 SqlParameter[] parameters = {
                     new SqlParameter("@ID", staffID),
                     new SqlParameter("@HoTen", cboHoTen.Text.Trim()),
@@ -113,7 +117,7 @@ namespace QuanLyThuVien
                     new SqlParameter("@BangCap", cboBangCap.SelectedItem?.ToString() ?? ""),
                     new SqlParameter("@BoPhan", selectedBoPhan),
                     new SqlParameter("@ChucVu", selectedChucVu),
-                    new SqlParameter("@MatKhau", cboMatKhau.Text.Trim())
+                    new SqlParameter("@MatKhau", hashedPassword)
                 };
 
                 DatabaseHelper.ExecuteNonQuery(sql, parameters);
