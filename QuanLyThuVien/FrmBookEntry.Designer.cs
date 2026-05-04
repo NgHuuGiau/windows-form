@@ -1,4 +1,4 @@
-﻿        namespace QuanLyThuVien
+        namespace QuanLyThuVien
 {
     partial class FrmBookEntry
     {
@@ -46,6 +46,12 @@
             this.cboTheLoai = new System.Windows.Forms.ComboBox();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnDong = new System.Windows.Forms.Button();
+            this.dgvBooks = new System.Windows.Forms.DataGridView();
+            this.panelLeft = new System.Windows.Forms.Panel();
+            this.lblTotalBooksValue = new System.Windows.Forms.Label();
+            this.lblTotalBooks = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
+            this.panelLeft.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTenSach
@@ -162,7 +168,7 @@
             // 
             // dtpNgayNhap
             // 
-            this.dtpNgayNhap.Location = new System.Drawing.Point(212, 212);
+            this.dtpNgayNhap.Location = new System.Drawing.Point(208, 213);
             this.dtpNgayNhap.Margin = new System.Windows.Forms.Padding(4);
             this.dtpNgayNhap.Name = "dtpNgayNhap";
             this.dtpNgayNhap.Size = new System.Drawing.Size(265, 22);
@@ -178,7 +184,7 @@
             // 
             // txtGiaBan
             // 
-            this.txtGiaBan.Location = new System.Drawing.Point(212, 251);
+            this.txtGiaBan.Location = new System.Drawing.Point(208, 252);
             this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4);
             this.txtGiaBan.Name = "txtGiaBan";
             this.txtGiaBan.Size = new System.Drawing.Size(265, 22);
@@ -186,7 +192,7 @@
             // 
             // txtGiaThue
             // 
-            this.txtGiaThue.Location = new System.Drawing.Point(212, 292);
+            this.txtGiaThue.Location = new System.Drawing.Point(208, 291);
             this.txtGiaThue.Margin = new System.Windows.Forms.Padding(4);
             this.txtGiaThue.Name = "txtGiaThue";
             this.txtGiaThue.Size = new System.Drawing.Size(265, 22);
@@ -195,7 +201,7 @@
             // cboTheLoai
             // 
             this.cboTheLoai.FormattingEnabled = true;
-            this.cboTheLoai.Location = new System.Drawing.Point(208, 94);
+            this.cboTheLoai.Location = new System.Drawing.Point(208, 96);
             this.cboTheLoai.Margin = new System.Windows.Forms.Padding(4);
             this.cboTheLoai.Name = "cboTheLoai";
             this.cboTheLoai.Size = new System.Drawing.Size(265, 24);
@@ -223,35 +229,83 @@
             this.btnDong.Text = "Đóng";
             this.btnDong.UseVisualStyleBackColor = true;
             // 
+            // dgvBooks
+            // 
+            this.dgvBooks.BackgroundColor = System.Drawing.SystemColors.ActiveCaption;
+            this.dgvBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBooks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBooks.Location = new System.Drawing.Point(500, 0);
+            this.dgvBooks.Name = "dgvBooks";
+            this.dgvBooks.RowHeadersWidth = 51;
+            this.dgvBooks.RowTemplate.Height = 24;
+            this.dgvBooks.Size = new System.Drawing.Size(750, 670);
+            this.dgvBooks.TabIndex = 18;
+            // 
+            // panelLeft
+            // 
+            this.panelLeft.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panelLeft.Controls.Add(this.lblTotalBooksValue);
+            this.panelLeft.Controls.Add(this.lblTotalBooks);
+            this.panelLeft.Controls.Add(this.btnDong);
+            this.panelLeft.Controls.Add(this.btnLuu);
+            this.panelLeft.Controls.Add(this.cboTheLoai);
+            this.panelLeft.Controls.Add(this.txtGiaThue);
+            this.panelLeft.Controls.Add(this.txtGiaBan);
+            this.panelLeft.Controls.Add(this.txtNamXuatBan);
+            this.panelLeft.Controls.Add(this.dtpNgayNhap);
+            this.panelLeft.Controls.Add(this.txtNhaXuatBan);
+            this.panelLeft.Controls.Add(this.txtTacGia);
+            this.panelLeft.Controls.Add(this.txtTenSach);
+            this.panelLeft.Controls.Add(this.lblGiaThue);
+            this.panelLeft.Controls.Add(this.lblNgayNhap);
+            this.panelLeft.Controls.Add(this.lblGiaBan);
+            this.panelLeft.Controls.Add(this.lblNhaXuatBan);
+            this.panelLeft.Controls.Add(this.lblNamXuatBan);
+            this.panelLeft.Controls.Add(this.lblTacGia);
+            this.panelLeft.Controls.Add(this.lblTheLoai);
+            this.panelLeft.Controls.Add(this.lblTenSach);
+            this.panelLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panelLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelLeft.Name = "panelLeft";
+            this.panelLeft.Size = new System.Drawing.Size(500, 670);
+            this.panelLeft.TabIndex = 19;
+            // 
+            // lblTotalBooksValue
+            // 
+            this.lblTotalBooksValue.AutoSize = true;
+            this.lblTotalBooksValue.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalBooksValue.ForeColor = System.Drawing.Color.Red;
+            this.lblTotalBooksValue.Location = new System.Drawing.Point(180, 410);
+            this.lblTotalBooksValue.Name = "lblTotalBooksValue";
+            this.lblTotalBooksValue.Size = new System.Drawing.Size(23, 24);
+            this.lblTotalBooksValue.TabIndex = 21;
+            this.lblTotalBooksValue.Text = "0";
+            // 
+            // lblTotalBooks
+            // 
+            this.lblTotalBooks.AutoSize = true;
+            this.lblTotalBooks.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalBooks.Location = new System.Drawing.Point(16, 410);
+            this.lblTotalBooks.Name = "lblTotalBooks";
+            this.lblTotalBooks.Size = new System.Drawing.Size(147, 24);
+            this.lblTotalBooks.TabIndex = 20;
+            this.lblTotalBooks.Text = "Tổng số sách:";
+            // 
             // FrmBookEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(501, 409);
-            this.Controls.Add(this.btnDong);
-            this.Controls.Add(this.btnLuu);
-            this.Controls.Add(this.cboTheLoai);
-            this.Controls.Add(this.txtGiaThue);
-            this.Controls.Add(this.txtGiaBan);
-            this.Controls.Add(this.txtNamXuatBan);
-            this.Controls.Add(this.dtpNgayNhap);
-            this.Controls.Add(this.txtNhaXuatBan);
-            this.Controls.Add(this.txtTacGia);
-            this.Controls.Add(this.txtTenSach);
-            this.Controls.Add(this.lblGiaThue);
-            this.Controls.Add(this.lblNgayNhap);
-            this.Controls.Add(this.lblGiaBan);
-            this.Controls.Add(this.lblNhaXuatBan);
-            this.Controls.Add(this.lblNamXuatBan);
-            this.Controls.Add(this.lblTacGia);
-            this.Controls.Add(this.lblTheLoai);
-            this.Controls.Add(this.lblTenSach);
+            this.ClientSize = new System.Drawing.Size(1250, 670);
+            this.Controls.Add(this.dgvBooks);
+            this.Controls.Add(this.panelLeft);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmBookEntry";
             this.Text = "Tiếp Nhận Sách Mới";
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
+            this.panelLeft.ResumeLayout(false);
+            this.panelLeft.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -275,5 +329,9 @@
         private System.Windows.Forms.ComboBox cboTheLoai;
         private System.Windows.Forms.Button btnLuu;
         private System.Windows.Forms.Button btnDong;
+        private System.Windows.Forms.DataGridView dgvBooks;
+        private System.Windows.Forms.Panel panelLeft;
+        private System.Windows.Forms.Label lblTotalBooks;
+        private System.Windows.Forms.Label lblTotalBooksValue;
     }
 }
