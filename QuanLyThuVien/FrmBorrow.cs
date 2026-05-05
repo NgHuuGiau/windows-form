@@ -47,19 +47,22 @@ namespace QuanLyThuVien
                 return;
             }
 
-            string query = "SELECT HoTen FROM TheDocGia WHERE IDDocGia = @ID";
+            string query = "SELECT HoTen, Email FROM TheDocGia WHERE IDDocGia = @ID";
             SqlParameter[] parameters = { new SqlParameter("@ID", txtReaderID.Text) };
             
             try
             {
-                object result = DatabaseHelper.ExecuteScalar(query, parameters);
-                if (result != null)
+                DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
+                if (dt.Rows.Count > 0)
                 {
-                    MessageBox.Show($"Tìm thấy độc giả: {result} (Mã: {txtReaderID.Text})", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    tenDocGia.Text = dt.Rows[0]["HoTen"].ToString();
+                    email.Text = dt.Rows[0]["Email"].ToString();
                 }
                 else
                 {
                     MessageBox.Show("Không tìm thấy độc giả!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tenDocGia.Text = "";
+                    email.Text = "";
                 }
             }
             catch (Exception ex)

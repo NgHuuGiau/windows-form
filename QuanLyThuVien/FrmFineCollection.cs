@@ -36,15 +36,17 @@ namespace QuanLyThuVien
                 return;
             }
 
-            string query = "SELECT TienNo FROM TheDocGia WHERE IDDocGia = @ID";
+            string query = "SELECT HoTen, Email, TienNo FROM TheDocGia WHERE IDDocGia = @ID";
             SqlParameter[] parameters = { new SqlParameter("@ID", txtReaderID.Text) };
             
             try
             {
-                object result = DatabaseHelper.ExecuteScalar(query, parameters);
-                if (result != null)
+                DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
+                if (dt.Rows.Count > 0)
                 {
-                    decimal currentFine = Convert.ToDecimal(result);
+                    tenDocGia.Text = dt.Rows[0]["HoTen"].ToString();
+                    email.Text = dt.Rows[0]["Email"].ToString();
+                    decimal currentFine = Convert.ToDecimal(dt.Rows[0]["TienNo"]);
                     txtCurrentFine.Text = currentFine.ToString();
                     txtAmountCollected.Text = "0";
                     txtRemainingFine.Text = currentFine.ToString();
@@ -52,6 +54,8 @@ namespace QuanLyThuVien
                 else
                 {
                     MessageBox.Show("Không tìm thấy độc giả!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tenDocGia.Text = "";
+                    email.Text = "";
                 }
             }
             catch (Exception ex)
@@ -85,7 +89,11 @@ namespace QuanLyThuVien
 
             try
             {
-                decimal remaining = decimal.Parse(txtRemainingFine.Text);
+                if (!decimal.TryParse(txtRemainingFine.Text, out decimal remaining))
+                {
+                    MessageBox.Show("Số tiền không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 string query = "UPDATE TheDocGia SET TienNo = @Remaining WHERE IDDocGia = @ID";
                 SqlParameter[] parameters = {
                     new SqlParameter("@Remaining", remaining),
