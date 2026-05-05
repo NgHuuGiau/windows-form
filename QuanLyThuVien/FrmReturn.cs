@@ -47,22 +47,27 @@ namespace QuanLyThuVien
                            "JOIN ThongTinSach S ON CT.IDSach = S.IDSach " +
                            "WHERE PM.IDNguoiMuon = @ReaderID AND CT.NgayTra IS NULL";
             
+            string queryReader = "SELECT HoTen, Email FROM TheDocGia WHERE IDDocGia = @ID";
             SqlParameter[] parameters = { new SqlParameter("@ReaderID", txtReaderID.Text) };
+            SqlParameter[] paramReader = { new SqlParameter("@ID", txtReaderID.Text) };
             
             try
             {
-                DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
-                dgvBorrowingList.DataSource = dt;
-                
-                if (dt.Rows.Count > 0)
+                DataTable dtReader = DatabaseHelper.ExecuteQuery(queryReader, paramReader);
+                if (dtReader.Rows.Count > 0)
                 {
-                    dtpBorrowDate.Value = Convert.ToDateTime(dt.Rows[0]["NgayMuon"]);
-                    CalculateFine();
+                    tenDocGia.Text = dtReader.Rows[0]["HoTen"].ToString();
+                    email.Text = dtReader.Rows[0]["Email"].ToString();
                 }
                 else
                 {
-                    MessageBox.Show("Không tìm thấy sách đang mượn của độc giả này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    tenDocGia.Text = "";
+                    email.Text = "";
                 }
+
+                DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
+                dgvBorrowingList.DataSource = dt;
+                
             }
             catch (Exception ex)
             {
