@@ -29,6 +29,10 @@ namespace QuanLyThuVien
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.email = new System.Windows.Forms.TextBox();
+            this.tenDocGia = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.btnSearchBorrowing = new System.Windows.Forms.Button();
             this.txtReaderID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -47,10 +51,6 @@ namespace QuanLyThuVien
             this.chkIsLost = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.email = new System.Windows.Forms.TextBox();
-            this.tenDocGia = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowingList)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -76,6 +76,44 @@ namespace QuanLyThuVien
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chi tiết thông tin";
+            // 
+            // email
+            // 
+            this.email.Enabled = false;
+            this.email.Location = new System.Drawing.Point(8, 190);
+            this.email.Margin = new System.Windows.Forms.Padding(4);
+            this.email.Name = "email";
+            this.email.Size = new System.Drawing.Size(336, 32);
+            this.email.TabIndex = 21;
+            // 
+            // tenDocGia
+            // 
+            this.tenDocGia.Enabled = false;
+            this.tenDocGia.Location = new System.Drawing.Point(8, 123);
+            this.tenDocGia.Margin = new System.Windows.Forms.Padding(4);
+            this.tenDocGia.Name = "tenDocGia";
+            this.tenDocGia.Size = new System.Drawing.Size(336, 32);
+            this.tenDocGia.TabIndex = 20;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 162);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 24);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Email";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(10, 95);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(114, 24);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Tên độc giả";
             // 
             // btnSearchBorrowing
             // 
@@ -103,7 +141,7 @@ namespace QuanLyThuVien
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 24);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Mã đọc giả";
+            this.label1.Text = "Mã độc giả";
             // 
             // btnCancel
             // 
@@ -187,8 +225,8 @@ namespace QuanLyThuVien
             // dtpReturnDate
             // 
             this.dtpReturnDate.CalendarFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpReturnDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpReturnDate.CustomFormat = "dd/MM/yyyy";
+            this.dtpReturnDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpReturnDate.Location = new System.Drawing.Point(15, 60);
             this.dtpReturnDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpReturnDate.Name = "dtpReturnDate";
@@ -267,44 +305,6 @@ namespace QuanLyThuVien
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(902, 572);
             this.panel2.TabIndex = 10;
-            // 
-            // email
-            // 
-            this.email.Enabled = false;
-            this.email.Location = new System.Drawing.Point(8, 190);
-            this.email.Margin = new System.Windows.Forms.Padding(4);
-            this.email.Name = "email";
-            this.email.Size = new System.Drawing.Size(336, 32);
-            this.email.TabIndex = 21;
-            // 
-            // tenDocGia
-            // 
-            this.tenDocGia.Enabled = false;
-            this.tenDocGia.Location = new System.Drawing.Point(8, 123);
-            this.tenDocGia.Margin = new System.Windows.Forms.Padding(4);
-            this.tenDocGia.Name = "tenDocGia";
-            this.tenDocGia.Size = new System.Drawing.Size(336, 32);
-            this.tenDocGia.TabIndex = 20;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 162);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 24);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Email";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(10, 95);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(114, 24);
-            this.label10.TabIndex = 15;
-            this.label10.Text = "Tên đọc giả";
             // 
             // FrmReturn
             // 

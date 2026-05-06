@@ -60,7 +60,7 @@ namespace QuanLyThuVien
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 24);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Mã đọc giả";
+            this.label1.Text = "Mã độc giả";
             // 
             // label3
             // 
@@ -243,7 +243,7 @@ namespace QuanLyThuVien
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(114, 24);
             this.label2.TabIndex = 12;
-            this.label2.Text = "Tên đọc giả";
+            this.label2.Text = "Tên độc giả";
             // 
             // FrmFineCollection
             // 

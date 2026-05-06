@@ -76,7 +76,8 @@ namespace QuanLyThuVien
                                 "CAST(100.0 * COUNT(*) / SUM(COUNT(*)) OVER() AS DECIMAL(5,2)) AS [Tỉ lệ (%)] " +
                                 "FROM PhieuMuon pm " +
                                 "JOIN ChiTietMuon ct ON pm.IDPhieuMuon = ct.IDPhieuMuon " +
-                                "JOIN ThongTinSach s ON ct.IDSach = s.IDSach " +
+                                "JOIN CaTheSach cts ON ct.IDCaTheSach = cts.IDCaTheSach " +
+                                "JOIN ThongTinSach s ON cts.IDSach = s.IDSach " +
                                 "JOIN DauSach ds ON s.IDDauSach = ds.IDDauSach " +
                                 "JOIN TheLoai tl ON ds.IDTheLoai = tl.IDTheLoai " +
                                 "WHERE ct.NgayMuon BETWEEN @Start AND @End " +
@@ -121,7 +122,8 @@ namespace QuanLyThuVien
                                 "SELECT s.TenSach AS [Tên sách], ct.NgayMuon AS [Ngày mượn], DATEDIFF(day, ct.HanTra, ct.NgayTra) AS [Số ngày trả trễ] " +
                                 "FROM PhieuMuon pm " +
                                 "JOIN ChiTietMuon ct ON pm.IDPhieuMuon = ct.IDPhieuMuon " +
-                                "JOIN ThongTinSach s ON ct.IDSach = s.IDSach " +
+                                "JOIN CaTheSach cts ON ct.IDCaTheSach = cts.IDCaTheSach " +
+                                "JOIN ThongTinSach s ON cts.IDSach = s.IDSach " +
                                 "JOIN DauSach ds ON s.IDDauSach = ds.IDDauSach " +
                                 "WHERE ct.NgayTra BETWEEN @Start AND @End " +
                                 "AND ct.NgayTra > ct.HanTra";
@@ -185,9 +187,9 @@ namespace QuanLyThuVien
 
                 dataGridView1.DataSource = dt;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Có lỗi xảy ra khi truy vấn dữ liệu báo cáo. Vui lòng liên hệ quản trị viên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Có lỗi xảy ra khi truy vấn dữ liệu báo cáo. Vui lòng liên hệ quản trị viên.\n\nChi tiết lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -269,9 +271,19 @@ namespace QuanLyThuVien
                     var worksheet = workbook.Worksheets.Add("BaoCao");
 
                     // ===== HEADER =====
+                    // ===== TIÊU ĐỀ (DÒNG 1) =====
+                    worksheet.Cell(1, 1).Value = labelBaoCao.Text;
+
+                    // merge toàn bộ cột
+                    worksheet.Cell(2, 1).Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy}";
+                    worksheet.Range(1, 1, 1, dgv.Columns.Count).Merge();
+
+                    worksheet.Cell(1, 1).Style.Font.Bold = true;
+                    worksheet.Cell(1, 1).Style.Font.FontSize = 14;
+                    worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     for (int i = 0; i < dgv.Columns.Count; i++)
                     {
-                        var cell = worksheet.Cell(1, i + 1);
+                        var cell = worksheet.Cell(3, i + 1);
                         cell.Value = dgv.Columns[i].HeaderText;
 
                         cell.Style.Font.Bold = true;
@@ -287,7 +299,7 @@ namespace QuanLyThuVien
                         {
                             var value = dgv.Rows[i].Cells[j].Value;
 
-                            var cell = worksheet.Cell(i + 2, j + 1);
+                            var cell = worksheet.Cell(i + 4, j + 1);
                             cell.Value = value?.ToString() ?? "";
 
                             cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;

@@ -43,16 +43,16 @@ namespace QuanLyThuVien
             this.btnCancel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -112,7 +112,7 @@ namespace QuanLyThuVien
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(114, 24);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Tên đọc giả";
+            this.label3.Text = "Tên độc giả";
             // 
             // btnSearchReader
             // 
@@ -126,8 +126,8 @@ namespace QuanLyThuVien
             // 
             // dtpBorrowDate
             // 
-            this.dtpBorrowDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBorrowDate.CustomFormat = "dd/MM/yyyy";
+            this.dtpBorrowDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBorrowDate.Location = new System.Drawing.Point(13, 124);
             this.dtpBorrowDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpBorrowDate.Name = "dtpBorrowDate";
@@ -160,7 +160,7 @@ namespace QuanLyThuVien
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 24);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Mã đọc giả";
+            this.label1.Text = "Mã độc giả";
             // 
             // dgvBooks
             // 
@@ -221,24 +221,6 @@ namespace QuanLyThuVien
             this.panel2.Size = new System.Drawing.Size(406, 598);
             this.panel2.TabIndex = 5;
             // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.dgvBooks);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(406, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(892, 598);
-            this.panel3.TabIndex = 6;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(13, 33);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(335, 32);
-            this.textBox1.TabIndex = 11;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button1);
@@ -263,6 +245,24 @@ namespace QuanLyThuVien
             this.button1.Text = "Tìm kiếm";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(13, 33);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(335, 32);
+            this.textBox1.TabIndex = 11;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.dgvBooks);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(406, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(892, 598);
+            this.panel3.TabIndex = 6;
+            // 
             // FrmBorrow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -279,9 +279,9 @@ namespace QuanLyThuVien
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

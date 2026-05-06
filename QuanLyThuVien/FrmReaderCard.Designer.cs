@@ -94,8 +94,8 @@ namespace QuanLyThuVien
             // 
             // dtpBirthDate
             // 
-            this.dtpBirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBirthDate.CustomFormat = "dd/MM/yyyy";
+            this.dtpBirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBirthDate.Location = new System.Drawing.Point(208, 92);
             this.dtpBirthDate.Margin = new System.Windows.Forms.Padding(4);
             this.dtpBirthDate.Name = "dtpBirthDate";
@@ -152,7 +152,7 @@ namespace QuanLyThuVien
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 24);
             this.label2.TabIndex = 19;
-            this.label2.Text = "Loại đọc giả";
+            this.label2.Text = "Loại độc giả";
             // 
             // label1
             // 
@@ -196,7 +196,7 @@ namespace QuanLyThuVien
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmReaderCard";
-            this.Text = "Thẻ Đọc Giả";
+            this.Text = "Thẻ Độc Giả";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
