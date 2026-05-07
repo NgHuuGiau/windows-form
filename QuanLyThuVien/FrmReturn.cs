@@ -217,8 +217,47 @@ namespace QuanLyThuVien
                 
                 // Update book count after processing returns or losses
                 UpdateBookCount();
-                
-                this.Close();
+                {
+                    if (string.IsNullOrWhiteSpace(txtReaderID.Text))
+                    {
+                        MessageBox.Show("Vui lòng nhập mã độc giả!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string query = @"SELECT CT.IDChiTietMuon, CT.IDPhieuMuon, CT.IDCaTheSach, S.TenSach, CT.NgayMuon, CT.HanTra 
+                           FROM ChiTietMuon CT 
+                           JOIN PhieuMuon PM ON CT.IDPhieuMuon = PM.IDPhieuMuon 
+                           JOIN CaTheSach CS ON CT.IDCaTheSach = CS.IDCaTheSach
+                           JOIN ThongTinSach S ON CS.IDSach = S.IDSach 
+                           WHERE PM.IDNguoiMuon = @ReaderID AND CT.NgayTra IS NULL";
+
+                    string queryReader = "SELECT HoTen, Email FROM TheDocGia WHERE IDDocGia = @ID";
+                    SqlParameter[] parameters = { new SqlParameter("@ReaderID", txtReaderID.Text) };
+                    SqlParameter[] paramReader = { new SqlParameter("@ID", txtReaderID.Text) };
+
+                    try
+                    {
+                        DataTable dtReader = DatabaseHelper.ExecuteQuery(queryReader, paramReader);
+                        if (dtReader.Rows.Count > 0)
+                        {
+                            tenDocGia.Text = dtReader.Rows[0]["HoTen"].ToString();
+                            email.Text = dtReader.Rows[0]["Email"].ToString();
+                        }
+                        else
+                        {
+                            tenDocGia.Text = "";
+                            email.Text = "";
+                        }
+
+                        DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
+                        dgvBorrowingList.DataSource = dt;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi tìm kiếm phiếu mượn: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             catch (Exception ex)
             {
