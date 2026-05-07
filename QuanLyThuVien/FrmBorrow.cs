@@ -26,15 +26,22 @@ namespace QuanLyThuVien
             LoadBooksFromDB();
         }
 
-        private void LoadBooksFromDB()
+        private void LoadBooksFromDB(string searchQuery = "")
         {
             string query = @"SELECT CT.IDCaTheSach, S.IDSach, S.TenSach, S.TacGia, CT.TinhTrang 
                            FROM CaTheSach CT 
                            JOIN ThongTinSach S ON CT.IDSach = S.IDSach 
                            WHERE CT.TinhTrang = N'Sẵn sàng'";
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                query += " AND S.TenSach LIKE @SearchQuery";
+            }
+            SqlParameter[] parameters = { new SqlParameter("@SearchQuery", "%" + searchQuery + "%") };
+
             try
             {
-                dgvBooks.DataSource = DatabaseHelper.ExecuteQuery(query);
+                dgvBooks.DataSource = DatabaseHelper.ExecuteQuery(query, parameters);
             }
             catch (Exception ex)
             {
@@ -197,9 +204,9 @@ namespace QuanLyThuVien
                 });
 
                 UpdateBookCount(); // Update the book count after successful transaction
+                LoadBooksFromDB();
 
                 MessageBox.Show($"Lập phiếu mượn thành công!\nMã phiếu: {phieuMuonID}\nHạn trả: {dtpBorrowDate.Value.AddDays(4):dd/MM/yyyy}", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
             }
             catch (Exception ex)
             {
@@ -241,6 +248,12 @@ namespace QuanLyThuVien
             {
                 Console.WriteLine("Error updating book count: " + ex.Message);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string searchQuery = searchBox.Text;
+            LoadBooksFromDB(searchQuery);
         }
     }
 }
