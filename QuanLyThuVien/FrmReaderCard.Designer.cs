@@ -40,8 +40,8 @@ namespace QuanLyThuVien
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.dgvReader = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReader)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -165,15 +165,15 @@ namespace QuanLyThuVien
             this.label1.TabIndex = 18;
             this.label1.Text = "Họ tên";
             // 
-            // dataGridView1
+            // dgvReader
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(494, 10);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(711, 454);
-            this.dataGridView1.TabIndex = 36;
+            this.dgvReader.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvReader.Location = new System.Drawing.Point(494, 10);
+            this.dgvReader.Name = "dgvReader";
+            this.dgvReader.RowHeadersWidth = 51;
+            this.dgvReader.RowTemplate.Height = 24;
+            this.dgvReader.Size = new System.Drawing.Size(711, 454);
+            this.dgvReader.TabIndex = 36;
             // 
             // FrmReaderCard
             // 
@@ -181,7 +181,7 @@ namespace QuanLyThuVien
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1217, 476);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvReader);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.cboReaderType);
@@ -197,7 +197,7 @@ namespace QuanLyThuVien
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmReaderCard";
             this.Text = "Thẻ Độc Giả";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReader)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,6 +217,6 @@ namespace QuanLyThuVien
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvReader;
     }
 }

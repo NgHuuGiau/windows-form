@@ -22,6 +22,52 @@ namespace QuanLyThuVien
             
             this.btnAdd.Click += BtnAdd_Click;
             this.btnCancel.Click += BtnCancel_Click;
+
+            SetupGridColumnsTheDocGia();
+            LoadDataTheDocGia();
+        }
+
+        private void SetupGridColumnsTheDocGia()
+        {
+            dgvReader.Columns.Clear();
+            dgvReader.AutoGenerateColumns = false;
+            dgvReader.Columns.Add("IDDocGia", "Mã độc giả");
+            dgvReader.Columns.Add("HoTen", "Họ tên");
+            dgvReader.Columns.Add("NgaySinh", "Ngày sinh");
+            dgvReader.Columns.Add("DiaChi", "Địa chỉ");
+            dgvReader.Columns.Add("Email", "Email");
+            dgvReader.Columns.Add("NgayLap", "Ngày lập");
+            dgvReader.Columns.Add("LoaiDocGia", "Loại độc giả");
+            dgvReader.Columns.Add("TienNo", "Tiền nợ");
+
+            dgvReader.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvReader.MultiSelect = false;
+        }
+
+        private void LoadDataTheDocGia()
+        {
+            try
+            {
+                string query = "SELECT IDDocGia, HoTen, NgaySinh, DiaChi, Email, NgayLap, LoaiDocGia, TienNo FROM TheDocGia";
+                var dt = DatabaseHelper.ExecuteQuery(query);
+                dgvReader.Rows.Clear();
+                foreach (DataRow r in dt.Rows)
+                {
+                    dgvReader.Rows.Add(r["IDDocGia"].ToString().Trim(),
+                        r["HoTen"].ToString().Trim(),
+                        Convert.ToDateTime(r["NgaySinh"]).ToString("dd/MM/yyyy"),
+                        r["DiaChi"].ToString().Trim(), 
+                        r["Email"].ToString().Trim(),
+                        Convert.ToDateTime(r["NgayLap"]).ToString("dd/MM/yyyy"),
+                        r["LoaiDocGia"].ToString().Trim(),
+                        r["TienNo"].ToString().Trim()
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadReaderTypes()
@@ -73,6 +119,9 @@ namespace QuanLyThuVien
             {
                 MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            SetupGridColumnsTheDocGia();
+            LoadDataTheDocGia();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
