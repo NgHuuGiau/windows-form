@@ -50,17 +50,45 @@ namespace QuanLyThuVien
                     txtCurrentFine.Text = currentFine.ToString();
                     txtAmountCollected.Text = "0";
                     txtRemainingFine.Text = currentFine.ToString();
+                    
+                    LoadBorrowingHistory(txtReaderID.Text);
                 }
                 else
                 {
                     MessageBox.Show("Không tìm thấy độc giả!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     tenDocGia.Text = "";
                     email.Text = "";
+                    txtCurrentFine.Text = "0";
+                    txtRemainingFine.Text = "0";
+                    dataGridView1.DataSource = null;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tìm kiếm độc giả: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        
+        private void LoadBorrowingHistory(string readerID)
+        {
+            string query = @"SELECT CT.IDChiTietMuon, S.TenSach, CT.NgayMuon, CT.HanTra, CT.NgayTra, CT.TienPhat, CT.TinhTrangTra
+                           FROM ChiTietMuon CT
+                           JOIN PhieuMuon PM ON CT.IDPhieuMuon = PM.IDPhieuMuon
+                           JOIN CaTheSach CTS ON CT.IDCaTheSach = CTS.IDCaTheSach
+                           JOIN ThongTinSach S ON CTS.IDSach = S.IDSach
+                           WHERE PM.IDNguoiMuon = @ReaderID
+                           ORDER BY CT.NgayMuon DESC";
+            
+            SqlParameter[] parameters = { new SqlParameter("@ReaderID", readerID) };
+            
+            try
+            {
+                DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
+                dataGridView1.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải lịch sử mượn: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -84,6 +112,13 @@ namespace QuanLyThuVien
             if (!decimal.TryParse(txtAmountCollected.Text, out decimal collected) || collected <= 0)
             {
                 MessageBox.Show("Số tiền thu không hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            decimal currentDebt = decimal.Parse(txtCurrentFine.Text);
+            if (collected > currentDebt)
+            {
+                MessageBox.Show("Số tiền thu không được vượt quá số nợ hiện tại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
