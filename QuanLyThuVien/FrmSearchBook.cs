@@ -30,7 +30,7 @@ namespace QuanLyThuVien
 
         private void CboTheLoaiFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadData();
+            LoadDataThongTinSach();
         }
 
         private void FrmSearchBook_Load(object sender, EventArgs e)
@@ -104,14 +104,18 @@ namespace QuanLyThuVien
             dgvBooks.MultiSelect = false;
         }
 
-        private void LoadDataThongTinSach()
+        private void LoadDataThongTinSach(string whereClause = null, SqlParameter[] parameters = null)
         {
             try
             {
                 string sql = "SELECT s.IDSach, s.TenSach, s.TacGia, s.NhaXuatBan, s.NamXuatBan, s.GiaBan, s.GiaThue, ISNULL(d.TenDauSach, s.IDDauSach) AS DauSach " +
                              "FROM ThongTinSach s " +
                              "LEFT JOIN DauSach d ON s.IDDauSach = d.IDDauSach";
-                var dt = DatabaseHelper.ExecuteQuery(sql, null);
+                if (!string.IsNullOrWhiteSpace(whereClause))
+                {
+                    sql += " WHERE " + whereClause;
+                }
+                var dt = DatabaseHelper.ExecuteQuery(sql, parameters);
                 dgvBooks.Rows.Clear();
                 foreach (DataRow r in dt.Rows)
                 {
@@ -133,14 +137,28 @@ namespace QuanLyThuVien
             }
         }
 
-        private void LoadDataCaTheSach(string idSach)
+        private void LoadDataCaTheSach(string idSach, string whereClause = null)
         {
             try
             {
                 string sql = "SELECT c.IDCaTheSach, c.IDSach, s.TenSach, c.TinhTrang " +
                              "FROM CaTheSach c " +
-                             "INNER JOIN ThongTinSach s ON c.IDSach = s.IDSach " +
-                             "WHERE c.IDSach = @idSach";
+                             "INNER JOIN ThongTinSach s ON c.IDSach = s.IDSach "
+                             ;
+                
+                if (!string.IsNullOrWhiteSpace(idSach))
+                {
+                    sql += " WHERE c.IDSach = @idSach";
+                }
+                else
+                {
+                    if (whereClause != null)
+                    {
+                        sql += " WHERE " + whereClause;
+                    }
+                }
+
+
                 var parameters = new SqlParameter[] { new SqlParameter("@idSach", idSach) };
                 var dt = DatabaseHelper.ExecuteQuery(sql, parameters);
                 dgvBooks.Rows.Clear();
@@ -244,7 +262,7 @@ namespace QuanLyThuVien
 
         public void RefreshData()
         {
-            LoadData();
+            LoadDataThongTinSach();
         }
 
         private string GetStatusText(string status)
@@ -298,7 +316,8 @@ namespace QuanLyThuVien
         {
             if (string.IsNullOrWhiteSpace(txtMaSach.Text))
             {
-                LoadData(borrowStatusClause);
+                SetupGridColumnsThongTinSach();
+                LoadDataThongTinSach();
             }
 
             string searchValue = txtMaSach.Text.Trim();
@@ -309,7 +328,8 @@ namespace QuanLyThuVien
 
             try
             {
-                LoadData(whereClause + (string.IsNullOrWhiteSpace(borrowStatusClause) ? "" : " AND " + borrowStatusClause), parameters);
+                SetupGridColumnsThongTinSach();
+                LoadDataThongTinSach(whereClause + (string.IsNullOrWhiteSpace(borrowStatusClause) ? "" : " AND " + borrowStatusClause), parameters);
 
                 if (dgvBooks.Rows.Count == 0)
                 {
@@ -334,13 +354,17 @@ namespace QuanLyThuVien
         private void Button3_Click(object sender, EventArgs e)
         {
             borrowStatusClause = "c.TinhTrang = N'Sẵn sàng'";
-            LoadData(borrowStatusClause);
+            if (_currentMasterId == null) _currentMasterId = "";
+            SetupGridColumnsCaTheSach();
+            LoadDataCaTheSach(_currentMasterId, borrowStatusClause);
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
             borrowStatusClause = "c.TinhTrang = N'Đang mượn'";
-            LoadData(borrowStatusClause);
+            if (_currentMasterId == null) _currentMasterId = "";
+            SetupGridColumnsCaTheSach();
+            LoadDataCaTheSach(_currentMasterId, borrowStatusClause);
         }
 
         private void BtnBack_Click(object sender, EventArgs e)
