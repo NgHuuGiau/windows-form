@@ -34,7 +34,6 @@
             this.btnDong = new System.Windows.Forms.Button();
             this.btnXacNhan = new System.Windows.Forms.Button();
             this.btnDeleteBook = new System.Windows.Forms.Button();
-            this.btnDeleteBook = new System.Windows.Forms.Button();
             this.dgvBooks = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -106,7 +105,7 @@
             this.btnXacNhan.TabIndex = 5;
             this.btnXacNhan.Text = "Xác nhận";
             this.btnXacNhan.UseVisualStyleBackColor = true;
-            this.btnXacNhan.Click += new System.EventHandler(this.XacNhan_Click);
+            //this.btnXacNhan.Click += new System.EventHandler(this.XacNhan_Click);
             // 
             // btnDeleteBook
             // 
