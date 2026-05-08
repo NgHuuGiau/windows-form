@@ -178,6 +178,13 @@ namespace QuanLyThuVien
                         // 2. Cập nhật trạng thái CaTheSach
                         DatabaseHelper.ExecuteNonQuery("UPDATE CaTheSach SET TinhTrang = N'Mất' WHERE IDCaTheSach = @CaTheSachID", 
                             new SqlParameter[] { new SqlParameter("@CaTheSachID", caTheSachID) });
+                        string queryUpdateCTMat = "UPDATE ChiTietMuon SET NgayTra = @ReturnDate, TienPhat = @Fine, TinhTrangTra = N'Đã trả' " +
+                                               "WHERE IDChiTietMuon = @CTID";
+                        DatabaseHelper.ExecuteNonQuery(queryUpdateCTMat, new SqlParameter[] {
+                            new SqlParameter("@ReturnDate", returnDate),
+                            new SqlParameter("@Fine", rowFine),
+                            new SqlParameter("@CTID", ctID)
+                        });
                     }
                     else
                     {

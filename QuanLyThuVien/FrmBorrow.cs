@@ -83,6 +83,8 @@ namespace QuanLyThuVien
 
         private void SetupGridColumnsThongTinSach()
         {
+            _currentMasterId = null;
+
             dgvBooks.Columns.Clear();
             dgvBooks.AutoGenerateColumns = false;
             dgvBooks.Columns.Add("IDSach", "Mã sách");
