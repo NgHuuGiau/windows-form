@@ -47,6 +47,7 @@ namespace QuanLyThuVien
             this.button1 = new System.Windows.Forms.Button();
             this.searchBox = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btnBack = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
             this.panel1.SuspendLayout();
@@ -213,6 +214,7 @@ namespace QuanLyThuVien
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel2.Controls.Add(this.btnBack);
             this.panel2.Controls.Add(this.groupBox2);
             this.panel2.Controls.Add(this.groupBox1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
@@ -263,6 +265,17 @@ namespace QuanLyThuVien
             this.panel3.Size = new System.Drawing.Size(892, 598);
             this.panel3.TabIndex = 6;
             // 
+            // btnBack
+            // 
+            this.btnBack.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
+            this.btnBack.Location = new System.Drawing.Point(85, 541);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(231, 35);
+            this.btnBack.TabIndex = 26;
+            this.btnBack.Text = "← Quay lại danh sách";
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Visible = false;
+            // 
             // FrmBorrow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -307,5 +320,6 @@ namespace QuanLyThuVien
         private System.Windows.Forms.TextBox searchBox;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnBack;
     }
 }

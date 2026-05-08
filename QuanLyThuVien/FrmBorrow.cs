@@ -10,20 +10,52 @@ using System.Windows.Forms;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Helpers;
 using System.Data.SqlClient;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace QuanLyThuVien
 {
     public partial class FrmBorrow : Form
     {
+        double tienNo;
+        private string _currentMasterId = null; // Tracks the current master ID for detail view
+
         public FrmBorrow()
         {
             InitializeComponent();
             
+            // Attach DoubleClick event handler
+            dgvBooks.DoubleClick += DataGridView1_DoubleClick;
+            
             this.btnSearchReader.Click += BtnSearchReader_Click;
             this.btnBorrow.Click += BtnBorrow_Click;
             this.btnCancel.Click += BtnCancel_Click;
+            this.btnBack.Click += BtnBack_Click;
             
-            LoadBooksFromDB();
+            SetupGridColumnsThongTinSach();
+            LoadThongTinSach();
+            btnBack.Visible = false;
+        }
+
+        private void BtnBack_Click(object sender, EventArgs e)
+        {
+            _currentMasterId = null;
+            SetupGridColumnsThongTinSach();
+            LoadThongTinSach();
+            btnBack.Visible = false;
+        }
+
+        private void DataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            if (dgvBooks.SelectedRows.Count == 0 || _currentMasterId != null) return;
+            
+            var selectedMasterId = dgvBooks.SelectedRows[0].Cells[0].Value?.ToString()?.Trim();
+            if (string.IsNullOrWhiteSpace(selectedMasterId)) return;
+            
+            _currentMasterId = selectedMasterId;
+            
+            SetupGridColumnsCaTheSach();
+            LoadThongTinCaTheSach(_currentMasterId);
+            btnBack.Visible = true;
         }
 
         private void LoadBooksFromDB(string searchQuery = "")
@@ -49,6 +81,99 @@ namespace QuanLyThuVien
             }
         }
 
+        private void SetupGridColumnsThongTinSach()
+        {
+            dgvBooks.Columns.Clear();
+            dgvBooks.AutoGenerateColumns = false;
+            dgvBooks.Columns.Add("IDSach", "Mã sách");
+            dgvBooks.Columns.Add("TenSach", "Tên sách");
+            dgvBooks.Columns.Add("TacGia", "Tác giả");
+            dgvBooks.Columns.Add("NamXuatBan", "Năm xuất bản");
+            dgvBooks.Columns.Add("NhaXuatBan", "Nhà xuất bản");
+            dgvBooks.Columns.Add("GiaBan", "Trị giá");
+            dgvBooks.Columns.Add("GiaThue", "Giá thuê");
+            dgvBooks.Columns.Add("IDDauSach", "Đầu sách");
+            dgvBooks.Columns.Add("SoLuong", "Số lượng");
+            dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvBooks.MultiSelect = false;
+        }
+
+        private void SetupGridColumnsCaTheSach()
+        {
+            dgvBooks.Columns.Clear();
+            dgvBooks.AutoGenerateColumns = false;
+            dgvBooks.Columns.Add("IDCaTheSach", "Mã cá thể sách");
+            dgvBooks.Columns.Add("IDSach", "Mã sách");
+            dgvBooks.Columns.Add("NgayNhap", "Ngày nhập");
+            dgvBooks.Columns.Add("TinhTrang", "Tình trạng");
+            dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvBooks.MultiSelect = true;
+        }
+
+        private void LoadThongTinSach(string whereClause = null)
+        {
+            try
+            {
+                string sql = "SELECT s.IDSach, s.TenSach, s.TacGia, s.NhaXuatBan, s.NamXuatBan, s.GiaBan, s.GiaThue, s.SoLuong, ISNULL(d.TenDauSach, s.IDDauSach) AS DauSach " +
+                             "FROM ThongTinSach s " +
+                             "LEFT JOIN DauSach d ON s.IDDauSach = d.IDDauSach";
+                if (!string.IsNullOrWhiteSpace(whereClause))
+                {
+                    sql += " WHERE s.TenSach LIKE @search";
+                }
+                var parameters = new SqlParameter[] { new SqlParameter("@search", "%" + whereClause + "%") };
+
+                var dt = DatabaseHelper.ExecuteQuery(sql, parameters);
+                dgvBooks.Rows.Clear();
+                foreach (DataRow r in dt.Rows)
+                {
+                    dgvBooks.Rows.Add(
+                        r["IDSach"]?.ToString()?.Trim(),
+                        r["TenSach"]?.ToString()?.Trim(),
+                        r["TacGia"]?.ToString()?.Trim(),
+                        r["NamXuatBan"],
+                        r["NhaXuatBan"]?.ToString()?.Trim(),
+                        r["GiaBan"],
+                        r["GiaThue"],
+                        r["DauSach"]?.ToString()?.Trim(),
+                        r["SoLuong"]
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể truy vấn dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void LoadThongTinCaTheSach(string idSach)
+        {
+            try
+            {
+                string sql = "SELECT c.IDCaTheSach, c.IDSach, c.NgayNhap, c.TinhTrang " +
+                             "FROM CaTheSach c " +
+                             "INNER JOIN ThongTinSach s ON c.IDSach = s.IDSach " +
+                             "WHERE c.IDSach = @idSach";
+                
+                var parameters = new SqlParameter[] { new SqlParameter("@idSach", idSach) };
+                var dt = DatabaseHelper.ExecuteQuery(sql, parameters);
+                dgvBooks.Rows.Clear();
+                foreach (DataRow r in dt.Rows)
+                {
+                    dgvBooks.Rows.Add(
+                        r["IDCaTheSach"]?.ToString()?.Trim(),
+                        r["IDSach"]?.ToString()?.Trim(),
+                        r["NgayNhap"] != DBNull.Value ? Convert.ToDateTime(r["NgayNhap"]).ToString("dd/MM/yyyy") : "",
+                        r["TinhTrang"]?.ToString()?.Trim()
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể truy vấn dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void BtnSearchReader_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtReaderID.Text))
@@ -57,7 +182,7 @@ namespace QuanLyThuVien
                 return;
             }
 
-            string query = "SELECT HoTen, Email FROM TheDocGia WHERE IDDocGia = @ID";
+            string query = "SELECT HoTen, Email, TienNo FROM TheDocGia WHERE IDDocGia = @ID";
             SqlParameter[] parameters = { new SqlParameter("@ID", txtReaderID.Text) };
             
             try
@@ -67,6 +192,7 @@ namespace QuanLyThuVien
                 {
                     tenDocGia.Text = dt.Rows[0]["HoTen"].ToString();
                     email.Text = dt.Rows[0]["Email"].ToString();
+                    tienNo = dt.Rows[0]["TienNo"] != DBNull.Value ? Convert.ToDouble(dt.Rows[0]["TienNo"]) : 0;
                 }
                 else
                 {
@@ -114,7 +240,7 @@ namespace QuanLyThuVien
                     MessageBox.Show("Độc giả đang nằm trong danh sách đen (Blacklist) và không thể mượn sách!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
-                if (loaiDocGia == "Graylist")
+                if (loaiDocGia == "Graylist" && tienNo > 0)
                 {
                     MessageBox.Show("Độc giả đang trong danh sách cảnh báo (Graylist). Vui lòng thanh toán nợ trước khi mượn sách!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -204,9 +330,9 @@ namespace QuanLyThuVien
                 });
 
                 UpdateBookCount(); // Update the book count after successful transaction
-                LoadBooksFromDB();
-
+                SetupGridColumnsThongTinSach();
                 MessageBox.Show($"Lập phiếu mượn thành công!\nMã phiếu: {phieuMuonID}\nHạn trả: {dtpBorrowDate.Value.AddDays(4):dd/MM/yyyy}", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadThongTinSach();
             }
             catch (Exception ex)
             {
@@ -253,7 +379,8 @@ namespace QuanLyThuVien
         private void button1_Click(object sender, EventArgs e)
         {
             string searchQuery = searchBox.Text;
-            LoadBooksFromDB(searchQuery);
+            SetupGridColumnsThongTinSach();
+            LoadThongTinSach(searchQuery);
         }
     }
 }
