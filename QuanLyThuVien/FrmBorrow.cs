@@ -310,7 +310,7 @@ namespace QuanLyThuVien
                         if (tinhTrangObj == null || tinhTrangObj.ToString().Trim() != "Sẵn sàng")
                         {
                             throw new Exception($"Sách {caTheSachID} không còn sẵn sàng!");
-}
+                        }
 
                         string ctID = DatabaseHelper.GenerateUniqueID("CT");
                         cmd.CommandText = @"INSERT INTO ChiTietMuon (IDChiTietMuon, IDPhieuMuon, IDCaTheSach, NgayMuon, HanTra, TinhTrangTra) 
